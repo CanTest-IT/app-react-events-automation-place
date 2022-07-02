@@ -1,0 +1,43 @@
+Tech stack:
+
+React
+Next JS
+Database - ???
+
+EKRAN 1
+
+Logowanie/uwierzytalnianie
+
+(Dane user do logowania są po prostu trzymane w bazie JSON?)
+
+EKRAN 2
+
+Lista produktów
+
+- W “kaflach” po trzy w kolumnie
+- Responsywne
+- Paginacja
+
+EKRAN 3
+
+Dodawanie/Edycja produktu
+
+Pola:
+- Nazwa (Input text) - OBLIGATORYJNE
+- Cena produktu (Number) - OBLIGATORYJNE
+- Kategoria produktu (dropdown) - OPCJONALNE
+- Czy produkt premium + tooltip (Checkbox) -> dwa badge Premium i Basic. Jeśli Checkboxes nie zaznaczony to będzie Basic - OPCJONALNE
+- Data premiery (data picker) - OPCJONALNE
+- Zdjęcie produktu (Upload) -> jeśli trudne jest trzymanie zdjęć to może tylko wybór predefiniowanych Awatar/Ikon per produkt - OPCJONALNE
+- Drag n drop (???) - to potem można dodać w innym miejscu bo tu średnio pasuje koncepcyjnie 
+
+
+USE CASE:
+
+1. Dodaj produkt -> POST -> po dodaniu TOAST 5 sekund
+2. Usuń produkt -> DELETE -> po usunięciu TOAST 5 sekund
+3. Edytuj produkt -> UPDATE -> po update TOAST 5 sekund
+4. Przeglądaj listę produktów -> GET -> paginacja
+5. Wyszukiwarka produktów na stronie -> searchbar na górze
+6. Błędy: Przy zwrotce 500 z backend -> wyświetl komunikat np. Pop up [To jest po to, żeby zrobić mock na response z API i symulować błędy aplikacji
+7. Jeszcze gdzieś można upchnąć jakiegoś GETa, żeby można było zrobić jeszcze jeden mock w testach automatycznych ale nie mam pomysłu więc niekonicznie
