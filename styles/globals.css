@@ -1,3 +1,7 @@
+@import '../public/assets/theme/indigo/theme-light.css';
+@import '../public/assets/layout/css/layout-light.css';
+@import '../public/assets/pages/primeflex.min.css';
+
 html,
 body {
   padding: 0;
