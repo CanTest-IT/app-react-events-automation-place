@@ -144,7 +144,7 @@ const AppTopbar = (props) => {
                     </g>
                 </svg>
                 </button>
-                <button type="button" className="layout-menu-button shadow-6 p-link" onClick={props.onMenuButtonClick}>
+                <button type="button" style={{ backgroundColor: '#ff5c13' }} className="layout-menu-button shadow-6 p-link" onClick={props.onMenuButtonClick}>
                     <i className="pi pi-chevron-right"></i>
                 </button>
                 <button type="button" className="layout-topbar-mobile-button p-link">
@@ -154,12 +154,11 @@ const AppTopbar = (props) => {
 
             <div className={classNames('layout-topbar-right', { 'layout-topbar-mobile-active': props.mobileTopbarActive })}>
                 <div className="layout-topbar-actions-left">
-                    <MegaMenu model={model} className="layout-megamenu" />
                 </div>
                 <div className="layout-topbar-actions-right">
                     <ul className="layout-topbar-items">
                         <li className="layout-topbar-item layout-search-item">
-                            <button className="layout-topbar-action rounded-circle p-link" onClick={() => props.onSearch(true)}>
+                            <button className="layout-topbar-action rounded-circle p-link">
                                 <i className="pi pi-search fs-large"></i>
                             </button>
                             <CSSTransition classNames="p-toggleable" timeout={{ enter: 1000, exit: 450 }} in={props.searchActive} unmountOnExit>
@@ -174,7 +173,7 @@ const AppTopbar = (props) => {
                         </li>
 
                         <li className="layout-topbar-item notifications">
-                            <button className="layout-topbar-action rounded-circle p-link" onClick={(event) => props.onTopbarItemClick({ originalEvent: event, item: 'notifications' })}>
+                            <button className="layout-topbar-action rounded-circle p-link">
                                 <span className="p-overlay-badge">
                                     <i className="pi pi-bell fs-large"></i>
                                     <span className="p-badge p-badge-warning p-badge-dot"></span>
@@ -238,7 +237,7 @@ const AppTopbar = (props) => {
                             </CSSTransition>
                         </li>
                         <li className="layout-topbar-item app">
-                            <button className="layout-topbar-action rounded-circle p-link" onClick={(event) => props.onTopbarItemClick({ originalEvent: event, item: 'apps' })}>
+                            <button className="layout-topbar-action rounded-circle p-link">
                                 <i className="pi pi-table fs-large"></i>
                             </button>
 

@@ -9,10 +9,16 @@ import { Calendar } from 'primereact/calendar';
 import { Checkbox } from 'primereact/checkbox';
 import { Rating } from 'primereact/rating';
 import { Toast } from 'primereact/toast';
+import moment from 'moment';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import axios from 'axios'
 
-const ListDemo = ({ events }) => {
+const getFilteredEvents = (events, query) => {
+    if (!query) return events;
+    return events.filter((e) => e.name.toLowerCase().includes(query.toLowerCase().trim()))
+}
+
+const ListDemo = () => {
 
     let emptyProduct = {
         name: '',
@@ -23,12 +29,16 @@ const ListDemo = ({ events }) => {
         dateTo: null,
         image: null
     };
+    
 
     const [eventDialog, setEventDialog] = useState(false);
+    const [events, setEvents] = useState([])
     const [event, setEvent] = useState(emptyProduct);
+    const [searchText, setSearchText] = useState('')
     const [submitted, setSubmitted] = useState(false);
     const [categories, setCategories] = useState([])
     const [images, setImages] = useState([])
+    const [eventToDelete, setEventToDelete] = useState(false)
     const toast = useRef(null);
     const dt = useRef(null);
 
@@ -59,9 +69,14 @@ const ListDemo = ({ events }) => {
         fetch('/api/events')
           .then((res) => res.json())
           .then((data) => {
-            setDataviewValue(data)
+            setEvents(data)
+            setDataviewValue(getFilteredEvents(data, searchText))
           })
     }
+
+    useEffect(() => {
+        setDataviewValue(getFilteredEvents(events, searchText))
+    }, [searchText, events])
 
     useEffect(() => {
         fetchEvents()
@@ -96,6 +111,7 @@ const ListDemo = ({ events }) => {
             .then(() => {
                 hideDialog()
                 fetchEvents()
+                setEventToDelete(false)
             })
     }, [])
 
@@ -123,12 +139,12 @@ const ListDemo = ({ events }) => {
         }
         promise
             .then(() => {
-                toast.current.show({ severity: 'success', summary: 'Success Message', detail: 'Message Detail', life: 3000 });
+                toast.current.show({ severity: 'success', summary: 'Success', detail: 'Event saved', life: 3000 });
                 hideDialog()
                 fetchEvents()
             })
             .catch(() => {
-                toast.current.show({ severity: 'error', summary: 'Error Message', detail: 'Message Detail', life: 3000 });
+                toast.current.show({ severity: 'error', summary: 'Error', detail: 'Problem encountered', life: 3000 });
             })
     }, [event])
 
@@ -137,7 +153,8 @@ const ListDemo = ({ events }) => {
             <div className="col-6" style={{ textAlign: 'left' }}>
                 <Button label="New" icon="pi pi-plus" className="p-button-success mr-2" onClick={() => open()} />
             </div>
-            <div className="col-6" style={{ textAlign: 'right' }}>
+            <div className="col-6" style={{ textAlign: 'right', flexDirection: 'row', display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+                <InputText style={{ marginRight: 8 }} type="search" onInput={(e) => setSearchText(e.target.value)} placeholder="Search..." />
                 <DataViewLayoutOptions layout={layout} onChange={(e) => setLayout(e.value)} />
             </div>
         </div>
@@ -166,9 +183,9 @@ const ListDemo = ({ events }) => {
                     </div>
                     <div className="flex flex-row md:flex-column justify-content-between w-full md:w-auto align-items-center md:align-items-end mt-5 md:mt-0">
                         <span className="text-2xl font-semibold mb-2 align-self-center md:align-self-end">${data.price}</span>
-                        <Button icon="pi pi-user-edit" onClick={() => open(data)} label="Edit" ></Button>
+                        <Button icon="pi pi-user-edit" onClick={() => open(data)} label="" ></Button>
                         <br/><br/>
-                        <Button icon="pi pi-trash" onClick={() => deleteEvent(data)} label="Remove"></Button>
+                        <Button icon="pi pi-trash" onClick={() => setEventToDelete(data)} label=""></Button>
                         <span className={`product-badge`}>{data.inventoryStatus}</span>
                     </div>
                 </div>
@@ -178,7 +195,15 @@ const ListDemo = ({ events }) => {
 
     const dataviewGridItem = (data) => {
         return (
-            <div className="col-12 md:col-4">
+            <div className="col-12 md:col-4" style={{ position: 'relative' }}>
+                <div style={{ position: 'absolute', bottom: 25, left: 25 }}>
+                    <i className="pi pi-calendar" style={{marginRight: 3}}></i>
+                    <small>{moment(data.dateFrom).format('D MMMM YY')}</small>
+                </div>
+                <div style={{ position: 'absolute', bottom: 25, right: 25 }}>
+                    <i className="pi pi-money-bill" style={{marginRight: 3}}></i>
+                    <small>${data.price}</small>
+                </div>
                 <div className="card m-3 border-1 surface-border">
                     <div className="flex align-items-center justify-content-between">
                         <div className="flex align-items-center">
@@ -186,9 +211,9 @@ const ListDemo = ({ events }) => {
                             <span className="font-semibold">{data.category}</span>
                         </div>
                         <div>
-                            <Button icon="pi pi-user-edit" onClick={() => open(data)} label="Edit" ></Button>
+                            <Button icon="pi pi-user-edit" onClick={() => open(data)} label="" ></Button>
                             &nbsp;
-                            <Button icon="pi pi-trash" onClick={() => deleteEvent(data)} label="Remove"></Button>
+                            <Button icon="pi pi-trash" onClick={() => setEventToDelete(data)} label=""></Button>
                         </div>
                     </div>
                     <div className="text-center">
@@ -215,9 +240,22 @@ const ListDemo = ({ events }) => {
         }
     };
 
+    const confirmationDialogFooter = (
+        <>
+            <Button type="button" label="No" icon="pi pi-times" onClick={() => setEventToDelete(false)} className="p-button-text" />
+            <Button type="button" label="Yes" icon="pi pi-check" onClick={() => deleteEvent(eventToDelete)} className="p-button-text" autoFocus />
+        </>
+    );
+
     return (
         <div className="grid list-demo">
             <Toast ref={toast} />
+            <Dialog header="Confirmation" visible={eventToDelete} onHide={() => setEventToDelete(false)} style={{ width: '350px' }} modal footer={confirmationDialogFooter}>
+                <div className="flex align-items-center justify-content-center">
+                    <i className="pi pi-exclamation-triangle mr-3" style={{ fontSize: '2rem' }} />
+                    <span>Are you sure you want to delete {eventToDelete?.name}?</span>
+                </div>
+            </Dialog>
             <div className="col-12">
                 <div className="card">
                     <h5>Events list</h5>

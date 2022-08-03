@@ -81,150 +81,16 @@ const App = () => {
 
     const menu = [
         {
-            label: 'Favorites', icon: 'pi pi-fw pi-home',
+            label: 'Menu', icon: 'pi pi-fw pi-home',
             items: [
-                { label: 'Dashboard Sales', icon: 'pi pi-fw pi-home', to: '/', badge: '4', badgeClassName: 'p-badge-info' },
-                { label: 'Dashboard Analytics', icon: 'pi pi-fw pi-home', to: '/favorites/dashboardanalytics', badge: '2', badgeClassName: 'p-badge-success' },
-            ]
-        },
-        {
-            label: 'UI Kit', icon: 'pi pi-fw pi-star-fill',
-            items: [
-                { label: 'Form Layout', icon: 'pi pi-fw pi-id-card', to: '/uikit/formlayout', badge: '6', badgeClassName: 'p-badge-warning' },
-                { label: 'Input', icon: 'pi pi-fw pi-check-square', to: '/uikit/input', badge: '6', badgeClassName: 'p-badge-danger' },
-                { label: 'Float Label', icon: 'pi pi-fw pi-bookmark', to: '/uikit/floatlabel' },
-                { label: 'Invalid State', icon: 'pi pi-fw pi-exclamation-circle', to: '/uikit/invalidstate' },
-                { label: 'Button', icon: 'pi pi-fw pi-mobile', to: '/uikit/button', className: 'rotated-icon' },
-                { label: 'Table', icon: 'pi pi-fw pi-table', to: '/uikit/table', badge: '6', badgeClassName: 'p-badge-help' },
-                { label: 'List', icon: 'pi pi-fw pi-list', to: '/uikit/list' },
-                { label: 'Tree', icon: 'pi pi-fw pi-share-alt', to: '/uikit/tree' },
-                { label: 'Panel', icon: 'pi pi-fw pi-tablet', to: '/uikit/panel' },
-                { label: 'Overlay', icon: 'pi pi-fw pi-clone', to: '/uikit/overlay' },
-                { label: 'Menu', icon: 'pi pi-fw pi-bars', to: '/uikit/menu' },
-                { label: 'Message', icon: 'pi pi-fw pi-comment', to: '/uikit/message' },
-                { label: 'File', icon: 'pi pi-fw pi-file', to: '/uikit/file' },
-                { label: 'Chart', icon: 'pi pi-fw pi-chart-bar', to: '/uikit/chart' },
-                { label: 'Misc', icon: 'pi pi-fw pi-circle', to: '/uikit/misc' },
-            ]
-        },
-        {
-            label: "PrimeBlocks", icon: "pi pi-fw pi-prime",
-            items: [
-                { label: "Free Blocks", icon: "pi pi-fw pi-eye", to: "/primeblocks/blocks", badge: "NEW", badgeStyle: { width: '40px' } },
-                { label: "All Blocks", icon: "pi pi-fw pi-globe", url: "https://www.primefaces.org/primeblocks-react", target: "_blank" }
-            ]
-        },
-        {
-            label: 'Utilities', icon: 'pi pi-fw pi-compass',
-            items: [
-                { label: 'Icons', icon: 'pi pi-fw pi-prime', to: '/utilities/icons' },
-                { label: "PrimeFlex", icon: "pi pi-fw pi-desktop", url: "https://www.primefaces.org/primeflex", target: "_blank" }
-            ]
-        },
-        {
-            label: 'Pages', icon: 'pi pi-fw pi-briefcase',
-            items: [
-                { label: 'Crud', icon: 'pi pi-fw pi-pencil', to: '/pages/crud' },
-                { label: 'Calendar', icon: 'pi pi-fw pi-calendar-plus', to: '/pages/calendar' },
-                { label: 'Timeline', icon: 'pi pi-fw pi-calendar', to: '/pages/timeline' },
-                {
-                    label: 'Landing', icon: 'pi pi-fw pi-globe', badge: '2', badgeClassName: 'p-badge-warning',
-                    items: [
-                        { label: 'Static', icon: 'pi pi-fw pi-globe', url: 'assets/pages/landing.html', target: '_blank' },
-                        { label: 'Component', icon: 'pi pi-fw pi-globe', to: '/landing' }
-                    ]
-                }, { label: 'Login', icon: 'pi pi-fw pi-sign-in', to: '/login' },
-                { label: 'Invoice', icon: 'pi pi-fw pi-dollar', to: '/pages/invoice' },
-                { label: 'Help', icon: 'pi pi-fw pi-question-circle', to: '/pages/help' },
-                { label: 'Error', icon: 'pi pi-fw pi-times-circle', to: '/error' },
-                { label: 'Not Found', icon: 'pi pi-fw pi-exclamation-circle', to: '/notfound' },
-                { label: 'Access Denied', icon: 'pi pi-fw pi-lock', to: '/access' },
-                { label: 'Empty Page', icon: 'pi pi-fw pi-circle', to: '/pages/empty' }
-            ]
-        },
-        {
-            label: 'Hierarchy', icon: 'pi pi-fw pi-align-left',
-            items: [
-                {
-                    label: 'Submenu 1', icon: 'pi pi-fw pi-align-left',
-                    items: [
-                        {
-                            label: 'Submenu 1.1', icon: 'pi pi-fw pi-align-left',
-                            items: [
-                                { label: 'Submenu 1.1.1', icon: 'pi pi-fw pi-align-left' },
-                                { label: 'Submenu 1.1.2', icon: 'pi pi-fw pi-align-left' },
-                                { label: 'Submenu 1.1.3', icon: 'pi pi-fw pi-align-left' },
-                            ]
-                        },
-                        {
-                            label: 'Submenu 1.2', icon: 'pi pi-fw pi-align-left',
-                            items: [
-                                { label: 'Submenu 1.2.1', icon: 'pi pi-fw pi-align-left' },
-                                { label: 'Submenu 1.2.2', icon: 'pi pi-fw pi-align-left' }
-                            ]
-                        },
-                    ]
-                },
-                {
-                    label: 'Submenu 2', icon: 'pi pi-fw pi-align-left',
-                    items: [
-                        {
-                            label: 'Submenu 2.1', icon: 'pi pi-fw pi-align-left',
-                            items: [
-                                { label: 'Submenu 2.1.1', icon: 'pi pi-fw pi-align-left' },
-                                { label: 'Submenu 2.1.2', icon: 'pi pi-fw pi-align-left' },
-                                { label: 'Submenu 2.1.3', icon: 'pi pi-fw pi-align-left' },
-                            ]
-                        },
-                        {
-                            label: 'Submenu 2.2', icon: 'pi pi-fw pi-align-left',
-                            items: [
-                                { label: 'Submenu 2.2.1', icon: 'pi pi-fw pi-align-left' },
-                                { label: 'Submenu 2.2.2', icon: 'pi pi-fw pi-align-left' }
-                            ]
-                        },
-                    ]
-                }
-            ]
-        },
-        {
-            label: 'Start', icon: 'pi pi-fw pi-download',
-            items: [
-                { label: 'Documentation', icon: 'pi pi-fw pi-question', to: '/start/documentation' },
-                { label: 'Buy Now', icon: 'pi pi-fw pi-shopping-cart', command: () => { window.location = "https://www.primefaces.org/store" } }
-            ]
+                { label: "Events", icon: "pi pi-star", url: "https://www.primefaces.org/primeflex", target: "_blank" },
+                { label: "Finances", icon: "pi pi-money-bill", url: "https://www.primefaces.org/primeflex", target: "_blank" },
+                { label: "CRM", icon: "pi pi-server", url: "https://www.primefaces.org/primeflex", target: "_blank" },
+                { label: "Sales", icon: "pi pi-chart-bar", url: "https://www.primefaces.org/primeflex", target: "_blank" },
+                { label: "Insights", icon: "pi pi-list", url: "https://www.primefaces.org/primeflex", target: "_blank" },
+                { label: "Settings", icon: "pi pi-cog", url: "https://www.primefaces.org/primeflex", target: "_blank" },
+            ],
         }
-    ];
-
-    const routes = [
-        { parent: '', label: '' },
-        { parent: 'Favorites', label: 'Dashboard Analytics' },
-        { parent: 'UI Kit', label: 'Form Layout' },
-        { parent: 'UI Kit', label: 'Input' },
-        { parent: 'UI Kit', label: 'Float Label' },
-        { parent: 'UI Kit', label: 'Invalid State' },
-        { parent: 'UI Kit', label: 'Button' },
-        { parent: 'UI Kit', label: 'Table' },
-        { parent: 'UI Kit', label: 'List' },
-        { parent: 'UI Kit', label: 'Panel' },
-        { parent: 'UI Kit', label: 'Tree' },
-        { parent: 'UI Kit', label: 'Overlay' },
-        { parent: 'UI Kit', label: 'Menu' },
-        { parent: 'UI Kit', label: 'Message' },
-        { parent: 'UI Kit', label: 'File' },
-        { parent: 'UI Kit', label: 'Chart' },
-        { parent: 'UI Kit', label: 'Misc' },
-        { parent: 'Utilities', label: 'Icons' },
-        { parent: 'PrimeBlocks', label: 'Blocks' },
-        { parent: 'Pages', label: 'Crud' },
-        { parent: 'Pages', label: 'Calendar' },
-        { parent: 'Pages', label: 'Timeline' },
-        { parent: 'Pages', label: 'Invoice' },
-        { parent: 'Pages', label: 'Login' },
-        { parent: 'Pages', label: 'Help' },
-        { parent: 'Pages', label: 'Empty' },
-        { parent: 'Pages', label: 'Access' },
-        { parent: 'Start', label: 'Documentation' }
     ];
 
     useEffect(() => {
@@ -493,38 +359,8 @@ const App = () => {
                 </div>
 
                 <div className="layout-main">
-
-                    {/* <AppBreadcrumb routes={routes} /> */}
-
                     <div className="layout-content">
-                      <ListDemo />
-                        {/* <Route path="/" exact render={() => <Dashboard colorMode={colorMode} isNewThemeLoaded={newThemeLoaded} onNewThemeChange={e => setNewThemeLoaded(e)} location={location} />} />
-                        <Route path="/start/documentation" component={Documentation} />
-                        <Route path="/favorites/dashboardanalytics" render={() => <DashboardAnalytics colorMode={colorMode} isNewThemeLoaded={newThemeLoaded} onNewThemeChange={e => setNewThemeLoaded(e)} location={location} />} />
-                        <Route path="/uikit/formlayout" component={FormLayoutDemo} />
-                        <Route path="/uikit/floatlabel" component={FloatLabelDemo} />
-                        <Route path="/uikit/input" component={InputDemo} />
-                        <Route path="/uikit/invalidstate" component={InvalidStateDemo} />
-                        <Route path="/uikit/button" component={ButtonDemo} />
-                        <Route path="/uikit/table" component={TableDemo} />
-                        <Route path="/uikit/list" component={ListDemo} />
-                        <Route path="/uikit/tree" component={TreeDemo} />
-                        <Route path="/uikit/panel" component={PanelDemo} />
-                        <Route path="/uikit/overlay" component={OverlayDemo} />
-                        <Route path="/uikit/menu" component={MenuDemo} />
-                        <Route path="/uikit/message" component={MessagesDemo} />
-                        <Route path="/uikit/file" component={FileDemo} />
-                        <Route path="/uikit/chart" render={() => <ChartDemo colorMode={colorMode} isNewThemeLoaded={newThemeLoaded} onNewThemeChange={e => setNewThemeLoaded(e)} location={location} />} />
-                        <Route path="/uikit/misc" component={MiscDemo} />
-                        <Route path="/primeblocks/blocks" component={BlocksDemo} />
-                        <Route path="/utilities/icons" component={IconsDemo} />
-                        <Route path="/pages/crud" component={Crud} />
-                        <Route path="/pages/calendar" component={Calendar} />
-                        <Route path="/pages/help" component={Help} />
-                        <Route path="/pages/invoice" component={Invoice} />
-                        <Route path="/pages/empty" component={EmptyPage} />
-                        <Route path="/pages/timeline" component={TimelineDemo} /> */}
-
+                      <ListDemo/>
                     </div>
 
                     <AppFooter colorMode={colorMode} />
@@ -541,7 +377,7 @@ const App = () => {
                     theme={theme} onThemeChange={onThemeChange}
                     isRTL={true} onRTLChange={onRTLChange} />
 
-                <AppRightMenu rightMenuActive={rightMenuActive} onRightMenuButtonClick={onRightMenuButtonClick} />
+                {/* <AppRightMenu rightMenuActive={rightMenuActive} onRightMenuButtonClick={onRightMenuButtonClick} /> */}
 
                 {mobileMenuActive && <div className="layout-mask modal-in"></div>}
             </div>
