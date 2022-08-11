@@ -235,7 +235,6 @@ const AppConfig = (props) => {
                     </div>
                 </div>
             </Sidebar>
-            {!active && <Button className="layout-config-button" icon="pi pi-cog p-button-icon" type="button" onClick={() => setActive(true)}></Button>}
         </>
     );
 

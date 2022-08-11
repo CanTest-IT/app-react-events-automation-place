@@ -1,0 +1,125 @@
+openapi: 3.0.3
+info:
+  title: Cantest.it - Events App API documentation
+  termsOfService: http://swagger.io/terms/
+  version: '1.0'
+  contact:
+    email: info@cantest.it
+paths:
+  /categories:
+    get:
+      tags:
+        - categories
+      summary: Gets available categories list
+      responses:
+        200:
+          description: Returns available categories list
+  /events:
+    get:
+      tags:
+        - events
+      summary: Gets all events list
+      responses:
+        200:
+          description: Returns available categories list
+    post:
+      tags:
+        - events 
+      responses:
+        200:
+          description: Created new event
+      summary: Creates new event
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name: 
+                  type: string
+                description:
+                  type: string
+                category:
+                  type: string
+                price:
+                  type: number
+                dateFrom:
+                  type: string
+                dateTo:
+                  type: string
+                image:
+                  type: string
+  /events/{id}:
+    delete:
+      tags:
+        - events
+      summary: Deletes exisisting event
+      responses:
+        200:
+          description: Deletes existing event
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: 
+            type: string
+    put:
+      tags:
+        - events
+      summary: Updates existing event
+      responses:
+        200:
+          description: Updates existing event
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: 
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name: 
+                  type: string
+                description:
+                  type: string
+                category:
+                  type: string
+                price:
+                  type: number
+                dateFrom:
+                  type: string
+                dateTo:
+                  type: string
+                image:
+                  type: string
+  /images:
+    get:
+      tags:
+      - images
+      summary: Gets available images names list
+      responses:
+        200:
+          description: Return names list
+  /images/{name}:
+    get:
+      tags:
+        - images
+      summary: Gets image by name
+      responses:
+        200:
+          description: Return image
+          content:
+            image/png:
+              schema:
+                format: binary
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema: 
+            type: string
+        

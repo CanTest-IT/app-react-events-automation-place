@@ -10,34 +10,7 @@ import AppMenu from '../components/AppMenu';
 import AppConfig from '../components/AppConfig';
 import AppRightMenu from '../components/AppRightMenu';
 
-// import Dashboard from '../components/Dashboard';
-// import DashboardAnalytics from '../components/DashboardAnalytics';
-// import ButtonDemo from '../components/ButtonDemo';
-// import ChartDemo from '../components/ChartDemo';
-// import MessagesDemo from '../components/MessagesDemo';
-// import Documentation from '../components/Documentation';
-// import FileDemo from '../components/FileDemo';
-// import FormLayoutDemo from '../components/FormLayoutDemo';
-// import InputDemo from '../components/InputDemo';
 import ListDemo from '../components/ListDemo';
-// import MiscDemo from '../components/MiscDemo';
-// import MenuDemo from '../components/MenuDemo';
-// import OverlayDemo from '../components/OverlayDemo';
-// import PanelDemo from '../components/PanelDemo';
-// import TableDemo from '../components/TableDemo';
-// import TreeDemo from '../components/TreeDemo';
-// import FloatLabelDemo from '../components/FloatLabelDemo';
-// import InvalidStateDemo from '../components/InvalidStateDemo';
-
-// import BlocksDemo from '../components/BlocksDemo';
-// import IconsDemo from './utilities/IconsDemo';
-
-// import Crud from './pages/Crud';
-// import Calendar from './pages/Calendar';
-// import EmptyPage from './pages/EmptyPage';
-// import Invoice from './pages/Invoice';
-// import Help from './pages/Help';
-// import TimelineDemo from './pages/TimelineDemo';
 
 import PrimeReact from 'primereact/api';
 import { Tooltip } from "primereact/tooltip";
@@ -84,11 +57,11 @@ const App = () => {
             label: 'Menu', icon: 'pi pi-fw pi-home',
             items: [
                 { label: "Events", icon: "pi pi-star", url: "https://www.primefaces.org/primeflex", target: "_blank" },
-                { label: "Finances", icon: "pi pi-money-bill", url: "https://www.primefaces.org/primeflex", target: "_blank" },
-                { label: "CRM", icon: "pi pi-server", url: "https://www.primefaces.org/primeflex", target: "_blank" },
-                { label: "Sales", icon: "pi pi-chart-bar", url: "https://www.primefaces.org/primeflex", target: "_blank" },
-                { label: "Insights", icon: "pi pi-list", url: "https://www.primefaces.org/primeflex", target: "_blank" },
-                { label: "Settings", icon: "pi pi-cog", url: "https://www.primefaces.org/primeflex", target: "_blank" },
+                { label: "Finances", disabled: true, icon: "pi pi-money-bill", url: "https://www.primefaces.org/primeflex", target: "_blank" },
+                { label: "CRM", disabled: true, icon: "pi pi-server", url: "https://www.primefaces.org/primeflex", target: "_blank" },
+                { label: "Sales", disabled: true, icon: "pi pi-chart-bar", url: "https://www.primefaces.org/primeflex", target: "_blank" },
+                { label: "Insights", disabled: true, icon: "pi pi-list", url: "https://www.primefaces.org/primeflex", target: "_blank" },
+                { label: "Settings", disabled: true, icon: "pi pi-cog", url: "https://www.primefaces.org/primeflex", target: "_blank" },
             ],
         }
     ];

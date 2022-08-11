@@ -157,21 +157,6 @@ const AppTopbar = (props) => {
                 </div>
                 <div className="layout-topbar-actions-right">
                     <ul className="layout-topbar-items">
-                        <li className="layout-topbar-item layout-search-item">
-                            <button className="layout-topbar-action rounded-circle p-link">
-                                <i className="pi pi-search fs-large"></i>
-                            </button>
-                            <CSSTransition classNames="p-toggleable" timeout={{ enter: 1000, exit: 450 }} in={props.searchActive} unmountOnExit>
-                                <div className="layout-search-panel p-inputgroup">
-                                    <span className="p-inputgroup-addon"><i className="pi pi-search"></i></span>
-                                    <InputText type="text" placeholder="Search" onKeyDown={onInputKeydown} />
-                                    <span className="p-inputgroup-addon">
-                                        <Button type="button" icon="pi pi-times" className="p-button-rounded p-button-text p-button-plain" onClick={() => props.onSearch(false)}></Button>
-                                    </span>
-                                </div>
-                            </CSSTransition>
-                        </li>
-
                         <li className="layout-topbar-item notifications">
                             <button className="layout-topbar-action rounded-circle p-link">
                                 <span className="p-overlay-badge">
@@ -317,11 +302,6 @@ const AppTopbar = (props) => {
                                     </li>
                                 </ul>
                             </CSSTransition>
-                        </li>
-                        <li className="layout-topbar-item">
-                            <button type="button" className="layout-topbar-action rounded-circle p-link" onClick={props.onRightMenuButtonClick}>
-                                <i className="pi fs-large pi-arrow-left"></i>
-                            </button>
                         </li>
                     </ul>
                 </div>

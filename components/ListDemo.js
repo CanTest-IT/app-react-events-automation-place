@@ -110,6 +110,7 @@ const ListDemo = () => {
         axios.delete(`api/events/${data.id}`)
             .then(() => {
                 hideDialog()
+                toast.current.show({ severity: 'success', summary: 'Success', detail: 'Event deleted', life: 3000 });
                 fetchEvents()
                 setEventToDelete(false)
             })
@@ -180,13 +181,19 @@ const ListDemo = () => {
                             <i className="pi pi-tag mr-2"></i>
                             <span className="font-semibold">{data.category}</span>
                         </div>
+                        <div style={{ marginTop: 8 }}>
+                            <i className="pi pi-calendar mr-2" ></i>
+                            <span className="font-semibold">{moment(data.dateFrom).format('D MMMM YY')}</span>
+                        </div>
+                        <div style={{ marginTop: 8 }}>
+                            <i className="pi pi-money-bill mr-2" ></i>
+                            <span className="font-semibold">${data.price}</span>
+                        </div>
                     </div>
                     <div className="flex flex-row md:flex-column justify-content-between w-full md:w-auto align-items-center md:align-items-end mt-5 md:mt-0">
-                        <span className="text-2xl font-semibold mb-2 align-self-center md:align-self-end">${data.price}</span>
                         <Button icon="pi pi-user-edit" onClick={() => open(data)} label="" ></Button>
-                        <br/><br/>
-                        <Button icon="pi pi-trash" onClick={() => setEventToDelete(data)} label=""></Button>
-                        <span className={`product-badge`}>{data.inventoryStatus}</span>
+                        <br/>
+                        <Button className="p-button-outlined p-button-danger" icon="pi pi-trash" onClick={() => setEventToDelete(data)} label=""></Button>
                     </div>
                 </div>
             </div>
@@ -195,15 +202,7 @@ const ListDemo = () => {
 
     const dataviewGridItem = (data) => {
         return (
-            <div className="col-12 md:col-4" style={{ position: 'relative' }}>
-                <div style={{ position: 'absolute', bottom: 25, left: 25 }}>
-                    <i className="pi pi-calendar" style={{marginRight: 3}}></i>
-                    <small>{moment(data.dateFrom).format('D MMMM YY')}</small>
-                </div>
-                <div style={{ position: 'absolute', bottom: 25, right: 25 }}>
-                    <i className="pi pi-money-bill" style={{marginRight: 3}}></i>
-                    <small>${data.price}</small>
-                </div>
+            <div className="col-12 md:col-4">
                 <div className="card m-3 border-1 surface-border">
                     <div className="flex align-items-center justify-content-between">
                         <div className="flex align-items-center">
@@ -213,14 +212,25 @@ const ListDemo = () => {
                         <div>
                             <Button icon="pi pi-user-edit" onClick={() => open(data)} label="" ></Button>
                             &nbsp;
-                            <Button icon="pi pi-trash" onClick={() => setEventToDelete(data)} label=""></Button>
+                            <Button className="p-button-outlined p-button-danger" icon="pi pi-trash" onClick={() => setEventToDelete(data)} label=""></Button>
                         </div>
                     </div>
                     <div className="text-center">
                         <img src={`/api/images/${data.image}`} alt={data.name} className="w-9 shadow-2 my-3 mx-0" />
-                        <div className="text-2xl font-bold">{data.name}</div>
-                        <div className="mb-3">{data.description}</div>
-                        <Rating value={data.rating} readonly cancel={false} />
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                            <div style={{ flex: 1, display: 'flex' }}>
+                                <i className="pi pi-calendar" style={{marginRight: 3}}></i>
+                                <small>{moment(data.dateFrom).format('D MMMM YY')}</small>
+                            </div>
+                            <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+                                <div className="text-xl font-bold">{data.name}</div>
+                                <Rating value={data.rating} readonly cancel={false} />
+                            </div>
+                            <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
+                                <i className="pi pi-money-bill" style={{marginRight: 3}}></i>
+                                <small>${data.price}</small>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
