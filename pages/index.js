@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { classNames } from 'primereact/utils';
-import { Route, useLocation } from 'react-router-dom'
+import nookies from 'nookies'
 
 import AppTopbar from '../components/AppTopbar';
 // import AppBreadcrumb from "../components/AppBreadcrumb";
@@ -8,20 +8,37 @@ import AppInlineMenu from '../components/AppInlineMenu';
 import AppFooter from '../components/AppFooter';
 import AppMenu from '../components/AppMenu';
 import AppConfig from '../components/AppConfig';
-import AppRightMenu from '../components/AppRightMenu';
+import Router from "next/router";
 
 import ListDemo from '../components/ListDemo';
 
 import PrimeReact from 'primereact/api';
 import { Tooltip } from "primereact/tooltip";
-
-import 'primereact/resources/primereact.min.css';
-import 'primeicons/primeicons.css';
-import 'primeflex/primeflex.css';
+import UserService from '../service/UserService';
+import jwt from 'jsonwebtoken';
+import JWT_SECRET from '../jwt';
 
 export const RTLContext = React.createContext();
+export const CurrentUserContext = React.createContext();
 
-const App = () => {
+export async function getServerSideProps(context) {
+    const { cantest_token } = context.req.cookies
+    let user = null;
+    if (cantest_token) {
+        const userFromToken = jwt.decode(cantest_token, JWT_SECRET)
+        if (userFromToken) {
+            user = new UserService().getUserById(userFromToken.login)
+        }
+    }
+    
+    return {
+      props: {
+          currentUser: user
+      }, // will be passed to the page component as props
+    }
+  }
+
+const App = ({ currentUser }) => {
 
     const [menuMode, setMenuMode] = useState('static');
     const [inlineMenuPosition, setInlineMenuPosition] = useState('bottom');
@@ -74,6 +91,10 @@ const App = () => {
             setDesktopMenuActive(true)
         }
     }, [menuMode])
+
+    useEffect(() => {
+        if (!currentUser) Router.push("/login");
+    }, [])
 
     const onMenuThemeChange = (theme) => {
         setMenuTheme(theme)
@@ -309,8 +330,12 @@ const App = () => {
         'layout-rtl': false
     });
 
+    if (!currentUser) {
+        return <div></div>
+    }
 
     return (
+        <CurrentUserContext.Provider value={{ currentUser }}>
             <div className={layoutContainerClassName} onClick={onDocumentClick}>
                 <Tooltip ref={copyTooltipRef} target=".block-action-copy" position="bottom" content="Copied to clipboard" event="focus" />
 
@@ -354,6 +379,7 @@ const App = () => {
 
                 {mobileMenuActive && <div className="layout-mask modal-in"></div>}
             </div>
+        </CurrentUserContext.Provider>
     );
 
 }
