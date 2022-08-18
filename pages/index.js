@@ -27,7 +27,7 @@ export async function getServerSideProps(context) {
     if (cantest_token) {
         const userFromToken = jwt.decode(cantest_token, JWT_SECRET)
         if (userFromToken) {
-            user = new UserService().getUserById(userFromToken.login)
+            user = new UserService().getUserById(userFromToken.id)
         }
     }
     
@@ -73,7 +73,7 @@ const App = ({ currentUser }) => {
         {
             label: 'Menu', icon: 'pi pi-fw pi-home',
             items: [
-                { label: "Events", icon: "pi pi-star", url: "https://www.primefaces.org/primeflex", target: "_blank" },
+                { label: "Events", icon: "pi pi-star", url: "https://www.cantest.it", target: "_blank" },
                 { label: "Finances", disabled: true, icon: "pi pi-money-bill", url: "https://www.primefaces.org/primeflex", target: "_blank" },
                 { label: "CRM", disabled: true, icon: "pi pi-server", url: "https://www.primefaces.org/primeflex", target: "_blank" },
                 { label: "Sales", disabled: true, icon: "pi pi-chart-bar", url: "https://www.primefaces.org/primeflex", target: "_blank" },

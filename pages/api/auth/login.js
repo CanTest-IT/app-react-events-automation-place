@@ -10,6 +10,8 @@ export default function handler(req, res) {
             const user = new UserService().getUserById(login)
             if (!user || user.password !== password) {
                 res.status(401)
+                res.send()
+                break;
             }
             const token = jwt.sign(user, JWT_SECRET)
             res.status(200).json(token)
