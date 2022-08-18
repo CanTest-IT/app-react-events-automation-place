@@ -45,8 +45,8 @@ const ListDemo = () => {
     const open = (data) => {
         setEvent(data && {
             ...data,
-            dateFrom: new Date(data.dateFrom),
-            dateTo: new Date(data.dateTo),
+            dateFrom: data.dateFrom && new Date(data.dateFrom),
+            dateTo: data.dateTo && new Date(data.dateTo),
             category: categories.find(c => c.code === data.category)
         } || emptyProduct);
         setSubmitted(false);
@@ -120,7 +120,7 @@ const ListDemo = () => {
         setSubmitted(true);
         let promise;
         let error = false
-        const keys = ['name', 'category', 'dateFrom', 'dateTo', 'price', 'image']
+        const keys = ['name','price']
         keys.forEach(key => {
             if (!event[key]) error = true
         })
@@ -129,9 +129,9 @@ const ListDemo = () => {
 
         const body = {
             ...event,
-            dateFrom: event.dateFrom.toISOString(),
-            dateTo: event.dateTo.toISOString(),
-            category: event.category.code
+            dateFrom: event.dateFrom && event.dateFrom.toISOString(),
+            dateTo: event.dateTo && event.dateTo.toISOString(),
+            category: event.category?.code
         }
         if (event.id) {
             promise = axios.put(`/api/events/${event.id}`, body)
@@ -172,7 +172,7 @@ const ListDemo = () => {
         return (
             <div className="col-12">
                 <div className="flex flex-column md:flex-row align-items-center p-3 w-full">
-                    <img src={`/api/images/${data.image}`} alt={data.name} className="my-4 md:my-0 w-9 md:w-10rem shadow-2 mr-5" />
+                    <img src={`/api/images/${data.image || '0.png'}`} alt={data.name} className="my-4 md:my-0 w-9 md:w-10rem shadow-2 mr-5" />
                     <div className="flex-1 text-center md:text-left">
                         <div className="font-bold text-2xl">{data.name}</div>
                         <div className="mb-3">{data.description}</div>
@@ -216,14 +216,14 @@ const ListDemo = () => {
                         </div>
                     </div>
                     <div className="text-center">
-                        <img src={`/api/images/${data.image}`} alt={data.name} className="w-9 shadow-2 my-3 mx-0" />
+                        <img src={`/api/images/${data.image || '0.png'}`} alt={data.name} className="w-9 shadow-2 my-3 mx-0" />
                         <div style={{ display: 'flex', alignItems: 'center' }}>
                             <div style={{ flex: 1, display: 'flex' }}>
                                 <i className="pi pi-calendar" style={{marginRight: 3}}></i>
                                 <small>{moment(data.dateFrom).format('D MMMM YY')}</small>
                             </div>
                             <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-                                <div className="text-xl font-bold">{data.name}</div>
+                                <div style={{ lineBreak: 'anywhere' }} className="text-xl font-bold">{data.name}</div>
                                 <Rating value={data.rating} readonly cancel={false} />
                             </div>
                             <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
@@ -277,7 +277,7 @@ const ListDemo = () => {
                         </div>
                         <div className="field">
                             <label htmlFor="category">Category</label>
-                            <Dropdown id="category" options={categories} value={event.category} className={classNames({ 'p-invalid': submitted && !event.category })} onChange={(e) => onInputChange(e, 'category')} optionLabel="name"></Dropdown>
+                            <Dropdown id="category" options={categories} value={event.category} onChange={(e) => onInputChange(e, 'category')} optionLabel="name"></Dropdown>
                         </div>
                         <div className="field">
                             <label htmlFor="price">Price</label>
@@ -285,11 +285,11 @@ const ListDemo = () => {
                         </div>
                         <div className="field">
                             <label htmlFor="dateFrom">Date from</label>
-                            <Calendar inputId="dateFrom" value={event.dateFrom} className={classNames({ 'p-invalid': submitted && !event.dateFrom })} onChange={(e) => onInputChange(e, 'dateFrom')}></Calendar>
+                            <Calendar inputId="dateFrom" value={event.dateFrom} onChange={(e) => onInputChange(e, 'dateFrom')}></Calendar>
                         </div>
                         <div className="field">
                             <label htmlFor="dateTo">Date to</label>
-                            <Calendar inputId="dateTo" value={event.dateTo} className={classNames({ 'p-invalid': submitted && !event.dateTo })} onChange={(e) => onInputChange(e, 'dateTo')}></Calendar>
+                            <Calendar inputId="dateTo" value={event.dateTo} onChange={(e) => onInputChange(e, 'dateTo')}></Calendar>
                         </div>
                         <div className="field">
                             <label htmlFor="dateTo">Image</label>
