@@ -9,6 +9,7 @@ import { Calendar } from 'primereact/calendar';
 import { Checkbox } from 'primereact/checkbox';
 import { Rating } from 'primereact/rating';
 import { Toast } from 'primereact/toast';
+import Head from 'next/head'
 import moment from 'moment';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import axios from 'axios'
@@ -218,15 +219,17 @@ const ListDemo = () => {
                     <div className="text-center">
                         <img src={`/api/images/${data.image || '0.png'}`} alt={data.name} className="w-9 shadow-2 my-3 mx-0" />
                         <div style={{ display: 'flex', alignItems: 'center' }}>
-                            <div style={{ flex: 1, display: 'flex' }}>
-                                <i className="pi pi-calendar" style={{marginRight: 3}}></i>
-                                <small>{moment(data.dateFrom).format('D MMMM YY')}</small>
-                            </div>
                             <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
                                 <div style={{ lineBreak: 'anywhere' }} className="text-xl font-bold">{data.name}</div>
                                 <Rating value={data.rating} readonly cancel={false} />
                             </div>
-                            <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop: 10}}>
+                            <div>
+                                <i className="pi pi-calendar" style={{marginRight: 3}}></i>
+                                <small>{moment(data.dateFrom).format('D MMMM YY')}</small>
+                            </div>
+                            <div>
                                 <i className="pi pi-money-bill" style={{marginRight: 3}}></i>
                                 <small>${data.price}</small>
                             </div>
@@ -258,6 +261,12 @@ const ListDemo = () => {
     );
 
     return (
+        <>
+        <Head>
+            <title>CanTest network</title>
+            <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+            <link rel="icon" type="image/x-icon" href="https://static.wixstatic.com/media/d4a01c_579d7aafc6be4be9ac6f31eaacfeef96%7Emv2.png/v1/fill/w_32%2Ch_32%2Clg_1%2Cusm_0.66_1.00_0.01/d4a01c_579d7aafc6be4be9ac6f31eaacfeef96%7Emv2.png"></link>
+        </Head>
         <div className="grid list-demo">
             <Toast ref={toast} />
             <Dialog header="Confirmation" visible={eventToDelete} onHide={() => setEventToDelete(false)} style={{ width: '350px' }} modal footer={confirmationDialogFooter}>
@@ -310,6 +319,7 @@ const ListDemo = () => {
                 </div>
             </div>
         </div>
+        </>
     )
 }
 
