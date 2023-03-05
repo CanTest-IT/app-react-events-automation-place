@@ -31,7 +31,7 @@ const AppInlineMenu = (props) => {
             <button data-pr-tooltip="Amy Elsner" className={classNames('avatarTooltip layout-inline-menu-action p-link flex flex-row align-items-center', { 'p-3 lg:p-1 py-3': props.horizontal, 'p-3': !props.horizontal })} onClick={(e) => props.onInlineMenuClick(e, menuKey)}>
                 <img src="assets/demo/images/avatar/amyelsner.png" alt="avatar" style={{ width: '32px', height: '32px', marginRight: 8 }} />
                 <span className={classNames('flex flex-column', { 'ml-2': !isRTL, 'mr-2': isRTL })}>
-                    <span className="font-bold">{currentUser.name} {currentUser.lastname}</span>
+                    <span className="font-bold" data-testid="username-text">{currentUser.name} {currentUser.lastname}</span>
                     <small>Webmaster</small>
                 </span>
                 <i className={classNames('layout-inline-menu-icon pi pi-angle-down', { 'ml-auto': !isRTL, 'mr-auto': isRTL })}></i>
