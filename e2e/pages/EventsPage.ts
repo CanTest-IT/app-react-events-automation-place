@@ -12,6 +12,6 @@ export class EventsPage {
   }
 
   async verifyUser(user: User): Promise<void> {
-    await expect(this.username).toHaveText(`${user.firstName}`)
+    await expect(this.username).toHaveText(`${user.firstName} ${user.lastName}`)
   }
 }
