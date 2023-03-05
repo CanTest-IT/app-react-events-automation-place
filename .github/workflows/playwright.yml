@@ -10,7 +10,7 @@ jobs:
     - uses: actions/setup-node@v3
 
     - name: Install dependencies
-      run: npm run install --force
+      run: npm install --force
 
     - name: Install Playwright with Browsers
       run: npx playwright install --with-deps
