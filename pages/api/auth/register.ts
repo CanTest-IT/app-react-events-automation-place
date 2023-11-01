@@ -1,8 +1,4 @@
-import { JsonDB } from 'node-json-db';
-import { Config } from 'node-json-db/dist/lib/JsonDBConfig'
 import UserService from '../../../service/UserService';
-
-const db = new JsonDB(new Config('data.json', true, true, '/'));
 
 export default function handler(req, res) {
     switch (req.method) {
