@@ -1,8 +1,5 @@
-import { JsonDB } from 'node-json-db';
-import { Config } from 'node-json-db/dist/lib/JsonDBConfig'
 import { User } from '../domain/user';
-
-const db = new JsonDB(new Config('data.json', true, false, '/'));
+import { db } from '../db/accessor';
 
 export default class UserService {
 

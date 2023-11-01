@@ -2,15 +2,18 @@ import axios from 'axios';
 
 export class ProductService {
 
-    getProductsSmall() {
-        return axios.get('assets/demo/data/products-small.json').then(res => res.data.data);
+    async getProductsSmall() {
+        const res = await axios.get('assets/demo/data/products-small.json');
+        return res.data.data;
     }
 
-    getProducts() {
-        return axios.get('assets/demo/data/products.json').then(res => res.data.data);
+    async getProducts() {
+        const res = await axios.get('assets/demo/data/products.json');
+        return res.data.data;
     }
 
-    getProductsWithOrdersSmall() {
-        return axios.get('assets/demo/data/products-orders-small.json').then(res => res.data.data);
+    async getProductsWithOrdersSmall() {
+        const res = await axios.get('assets/demo/data/products-orders-small.json');
+        return res.data.data;
     }
 }
