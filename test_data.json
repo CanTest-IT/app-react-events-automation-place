@@ -87,7 +87,7 @@
     ],
     "users": [
         {
-            "id": "user",
+            "login": "user",
             "password": "password",
             "name": "Event",
             "lastname": "Manager",
