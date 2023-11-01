@@ -1,14 +1,14 @@
-import UserService from '../../../service/UserService';
+import UserService, { userAlreadyExists } from '../../../service/UserService';
 
 export default function handler(req, res) {
     switch (req.method) {
         case 'POST':
-            const { id, password, name, lastname, age } = req.body;
+            const { login, password, name, lastname, age } = req.body;
             try {
-                const newUser = new UserService().createUser({ id, password, name, lastname, age });
+                const newUser = new UserService().createUser({ login, password, name, lastname, age });
                 return res.status(201).json(newUser);
             } catch (error) {
-                if (error.message === 'User already exists') {
+                if (error.message === userAlreadyExists) {
                     return res.status(400).json({ error: error.message });
                 }
                 return res.status(500).json({ error: error.message });

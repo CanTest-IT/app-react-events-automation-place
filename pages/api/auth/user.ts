@@ -11,7 +11,7 @@ export default function handler(req, res) {
                 res.status(401).end()
                 break;
             }
-            const foundUser = new UserService().getUserById(user.login)
+            const foundUser = new UserService().getUserByLogin(user.login)
             if (!foundUser) {
                 res.status(401).end()
                 break;

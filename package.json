@@ -7,7 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "apiTests": "DB_PATH=test_data.json yarn dev & wait-on http://localhost:3000 && DB_PATH=test_data.json jest"
+    "devApiTest": "DB_PATH=test_data.json next dev",
+    "apiTests": "DB_PATH=test_data.json jest",
+    "apiTestsCI": "DB_PATH=test_data.json yarn dev & wait-on http://localhost:3000 && DB_PATH=test_data.json jest",
+    "killServer": "pkill -9 node"
   },
   "dependencies": {
     "axios": "^0.27.2",
