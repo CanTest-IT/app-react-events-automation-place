@@ -1,5 +1,6 @@
 {
-    "events": [{
+    "events": [
+        {
             "name": "WEB3 for QA",
             "description": "",
             "category": "webinar",
@@ -42,7 +43,8 @@
             "id": "e6620abd-e92a-4861-8d3c-9a93f73ff097"
         }
     ],
-    "categories": [{
+    "categories": [
+        {
             "code": "concert",
             "name": "Concert"
         },
@@ -83,10 +85,13 @@
             "name": "Training"
         }
     ],
-    "users": [{
-        "id": "user",
-        "password": "password",
-        "name": "Event",
-        "lastname": "Manager"
-    }]
+    "users": [
+        {
+            "id": "user",
+            "password": "password",
+            "name": "Event",
+            "lastname": "Manager",
+            "age": 29
+        }
+    ]
 }
