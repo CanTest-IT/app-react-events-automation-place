@@ -18,3 +18,10 @@ a {
 * {
   box-sizing: border-box;
 }
+
+.create-account-button {
+  border-color: #eb5c20 !important; /* Orange border */
+  background-color: transparent !important; /* Transparent fill */
+  color: #ffffff !important; /* White text */
+  margin-top: 10px !important; /* Space above the button */
+}

@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axiosInstance from '../../axiosInstance.js';
 import dynamic from 'next/dynamic';
 import Router from "next/router";
 import { setCookie } from 'nookies';
@@ -25,22 +25,23 @@ const Login = () => {
 
 	const login = useCallback(() => {
 		setLoading(true)
-		axios.post('/api/auth/login', {
-			login: username,
-			password
+		axiosInstance.post('/api/auth/login', {
+		  login: username,
+		  password
 		})
-			.then((result) => {
-				setCookie(null, 'cantest_token', result.data, {
-					maxAge: 30 * 24 * 60 * 60,
-					path: '/',
-				})
-				Router.push('/')
-			})
-			.catch(() => {
-				toast.current.show({ severity: 'error', summary: 'Error', detail: 'Invalid data', life: 3000 });
-			})
-			.finally(setLoading)
-	}, [username, password])
+		.then((result) => {
+		  console.log('Login result:', result);
+		  console.log('Auth object:', result.data.auth); // Add this line to inspect the auth object
+		  // Set the token in the headers for all future requests
+		  // Ensure that result.data.auth.token is a string, not an object
+		  axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${result.data.auth.token.tokenString}`;
+		  Router.push('/')
+		})
+		.catch(() => {
+		  toast.current.show({ severity: 'error', summary: 'Error', detail: 'Invalid data', life: 3000 });
+		})
+		.finally(() => setLoading(false)) // Set loading to false when the request is complete
+	  }, [username, password])
 
 	return (
 		<>
@@ -73,7 +74,7 @@ const Login = () => {
 					</div>
 
 					<h4>Welcome</h4>
-					<div className="pages-detail mb-6 px-6">Please use the form to sign-in Cantest network</div>
+					<div className="pages-detail mb-6 px-6">Dive deep into test automation mastery</div>
 					<div className="input-panel flex flex-column px-3">
 						<div className="p-inputgroup">
 							<span className="p-inputgroup-addon">
@@ -96,6 +97,7 @@ const Login = () => {
 						</div>
 					</div>
 					<DynamicButton disabled={loading} onClick={login} className="login-button px-3" label="LOGIN"></DynamicButton>
+					<DynamicButton label="Create account" className="create-account-button" onClick={() => console.log('Redirecting to homepage', Router.push('/register'))} />
 				</div>
 			</div>
 		</div>

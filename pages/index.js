@@ -22,20 +22,33 @@ export const RTLContext = React.createContext();
 export const CurrentUserContext = React.createContext();
 
 export async function getServerSideProps(context) {
-    const { cantest_token } = context.req.cookies
+    console.log('Cookies:', context.req.cookies);
+    const { cantest_token } = context.req.cookies;
     let user = null;
     if (cantest_token) {
-        const userFromToken = jwt.decode(cantest_token, JWT_SECRET)
-        if (userFromToken) {
-            user = new UserService().getUserById(userFromToken.id)
-        }
+      const userFromToken = jwt.decode(cantest_token, JWT_SECRET);
+      console.log('User from token:', userFromToken);
+      if (userFromToken) {
+        user = await new UserService().getUserById(userFromToken.id); // Add the await keyword
+        console.log('User from UserService:', user);
+      }
+    } else {
+      // If there's no token, redirect to the login page
+      return {
+        redirect: {
+          destination: '/login',
+          permanent: false,
+        },
+      };
     }
-    
+  
+    console.log('User:', user);
+    // You should return something here if the user is authenticated
     return {
       props: {
-          currentUser: user
-      }, // will be passed to the page component as props
-    }
+        currentUser: user, // This should now be a plain JavaScript object, not a Promise
+      },
+    };
   }
 
 const App = ({ currentUser }) => {

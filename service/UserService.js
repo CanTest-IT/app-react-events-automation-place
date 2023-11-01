@@ -1,19 +1,66 @@
 import { JsonDB } from 'node-json-db';
 import { Config } from 'node-json-db/dist/lib/JsonDBConfig'
-import { v4 as uuidv4 } from 'uuid';
-
-// The first argument is the database filename. If no extension, '.json' is assumed and automatically added.
-// The second argument is used to tell the DB to save after each push
-// If you put false, you'll have to call the save() method.
-// The third argument is to ask JsonDB to save the database in an human readable format. (default false)
-// The last argument is the separator. By default it's slash (/)
-const db = new JsonDB(new Config('data.json', true, false, '/'));
 
 export default class UserService {
+  constructor() {
+    this.db = new JsonDB(new Config('data.json', true, false, '/'));
+  }
 
-    getUserById(login) {
-        const index = db.getIndex('/users', login)
-        if (index < 0) return null
-        return db.getData(`/users[${index}]`);
+  async getUserById(id) {
+    try {
+      if (!this.db.exists("/users")) {
+        console.log('No users in database');
+        return null;
+      }
+      const users = await this.db.getData("/users");
+      const user = users.find(user => user.id === id);
+      return user;
+    } catch(error) {
+      console.log('Error fetching user:', error);
+      if (error.id !== '5') {
+        throw error;
+      }
+      return null;
     }
+  }
+
+  async getUserByUsername(username) {
+    if (!this.db.exists("/users")) {
+      console.log('No users in database');
+      return null;
+    }
+    const users = await this.db.getData("/users");
+    const user = users.find(user => user.username === username);
+    return user || null;
+  }
+
+  createUser(user) {
+    try {
+      this.db.push("/users[]", user);
+    } catch(error) {
+      throw error;
+    }
+  }
+
+  async updateUser(user) {
+    const users = this.db.getData("/users");
+    const index = users.findIndex(u => u.id === user.id);
+    if (index !== -1) {
+      users[index] = user;
+      this.db.push("/users", users);
+      return user;
+    }
+    return null;
+  }
+
+  async deleteUser(id) {
+    const users = this.db.getData("/users");
+    const index = users.findIndex(u => u.id === id);
+    if (index !== -1) {
+      users.splice(index, 1);
+      this.db.push("/users", users);
+      return true;
+    }
+    return false;
+  }
 }
