@@ -12,7 +12,7 @@ const DynamicButton = dynamic(() => import('primereact/button').then(button => b
 
 const Register = () => {
 
-    const [username, setUsername] = useState('')
+    const [id, setId] = useState('')
     const [password, setPassword] = useState('')
     const [name, setName] = useState('')
     const [lastname, setLastname] = useState('')
@@ -23,7 +23,7 @@ const Register = () => {
     const register = useCallback(() => {
         setLoading(true)
         axios.post('/api/auth/register', {
-            id: username,
+            id,
             password,
             name,
             lastname,
@@ -36,7 +36,7 @@ const Register = () => {
                 toast.current.show({ severity: 'error', summary: 'Error', detail: 'Invalid data', life: 3000 });
             })
             .finally(setLoading)
-    }, [username, password, name, lastname, age])
+    }, [id, password, name, lastname, age])
 
     return (
         <>
@@ -57,8 +57,8 @@ const Register = () => {
                                     <i className="pi pi-user"></i>
                                 </span>
                                 <span className="p-float-label">
-                                    <InputText onChange={e => setUsername(e.target.value)} type="text" id="inputgroup1" />
-                                    <label htmlFor="inputgroup1">Username</label>
+                                    <InputText onChange={e => setId(e.target.value)} type="text" id="inputgroup1" />
+                                    <label htmlFor="inputgroup1">Id</label>
                                 </span>
                             </div>
 
