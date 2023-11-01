@@ -31,6 +31,6 @@ export default class EventService {
 
     deleteEvent(id) {
         const index = db.getIndex('/events', id)
-        db.delete(`/events[${index}]`, true);
+        db.delete(`/events[${index}]`);
     }
 }

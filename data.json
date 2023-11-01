@@ -1,1 +1,111 @@
-{"events":[{"name":"WEB3 for QA","description":"","category":"webinar","price":50,"dateFrom":"2022-10-11T22:00:00.000Z","dateTo":"2022-10-11T22:00:00.000Z","image":"1.png","isPremium":true,"id":"015f3869-a3e7-4970-8611-fa76dbd7959b"},{"name":"Muay Thai Trainings","description":"","category":"tranining","price":790,"dateFrom":"2022-09-16T22:00:00.000Z","dateTo":"2022-12-16T23:00:00.000Z","image":"4.png","id":"306dce4f-d455-454e-8328-008870894ae2"},{"name":"Asian cooking classes","description":"","category":"course","price":100,"dateFrom":"2022-11-11T23:00:00.000Z","dateTo":"2022-11-12T23:00:00.000Z","image":"2.png","id":"495012c1-52fc-48af-a7e3-2e03fb63dacd"},{"name":"Salt Wave 2022","description":"","category":"festival","price":200,"dateFrom":"2023-05-04T22:00:00.000Z","dateTo":"2023-05-19T22:00:00.000Z","image":"3.png","isPremium":true,"id":"e6620abd-e92a-4861-8d3c-9a93f73ff097"}],"categories":[{"code":"concert","name":"Concert"},{"code":"festival","name":"Festival"},{"code":"party","name":"Party"},{"code":"art","name":"Art"},{"code":"meeting","name":"Meeting"},{"code":"conference","name":"Conference"},{"code":"webinar","name":"Webinar"},{"code":"course","name":"Course"},{"code":"workshops","name":"Workshop"},{"code":"tranining","name":"Training"}],"users":[{"id":"user","password":"password","name":"Event","lastname":"Manager","age":29},{"id":"Emilia_Kling","password":"BTJJ9o9pH7pMdnR","name":"Jacinto","lastname":"Bahringer","age":19}]}
+{
+    "events": [
+        {
+            "name": "WEB3 for QA",
+            "description": "",
+            "category": "webinar",
+            "price": 50,
+            "dateFrom": "2022-10-11T22:00:00.000Z",
+            "dateTo": "2022-10-11T22:00:00.000Z",
+            "image": "1.png",
+            "isPremium": true,
+            "id": "015f3869-a3e7-4970-8611-fa76dbd7959b"
+        },
+        {
+            "name": "Muay Thai Trainings",
+            "description": "",
+            "category": "tranining",
+            "price": 790,
+            "dateFrom": "2022-09-16T22:00:00.000Z",
+            "dateTo": "2022-12-16T23:00:00.000Z",
+            "image": "4.png",
+            "id": "306dce4f-d455-454e-8328-008870894ae2"
+        },
+        {
+            "name": "Asian cooking classes",
+            "description": "",
+            "category": "course",
+            "price": 100,
+            "dateFrom": "2022-11-11T23:00:00.000Z",
+            "dateTo": "2022-11-12T23:00:00.000Z",
+            "image": "2.png",
+            "id": "495012c1-52fc-48af-a7e3-2e03fb63dacd"
+        },
+        {
+            "name": "Salt Wave 2022",
+            "description": "",
+            "category": "festival",
+            "price": 200,
+            "dateFrom": "2023-05-04T22:00:00.000Z",
+            "dateTo": "2023-05-19T22:00:00.000Z",
+            "image": "3.png",
+            "isPremium": true,
+            "id": "e6620abd-e92a-4861-8d3c-9a93f73ff097"
+        }
+    ],
+    "categories": [
+        {
+            "code": "concert",
+            "name": "Concert"
+        },
+        {
+            "code": "festival",
+            "name": "Festival"
+        },
+        {
+            "code": "party",
+            "name": "Party"
+        },
+        {
+            "code": "art",
+            "name": "Art"
+        },
+        {
+            "code": "meeting",
+            "name": "Meeting"
+        },
+        {
+            "code": "conference",
+            "name": "Conference"
+        },
+        {
+            "code": "webinar",
+            "name": "Webinar"
+        },
+        {
+            "code": "course",
+            "name": "Course"
+        },
+        {
+            "code": "workshops",
+            "name": "Workshop"
+        },
+        {
+            "code": "tranining",
+            "name": "Training"
+        }
+    ],
+    "users": [
+        {
+            "id": "user",
+            "password": "password",
+            "name": "Event",
+            "lastname": "Manager",
+            "age": 29
+        },
+        {
+            "id": "Emilia_Kling",
+            "password": "BTJJ9o9pH7pMdnR",
+            "name": "Jacinto",
+            "lastname": "Bahringer",
+            "age": 19
+        },
+        {
+            "id": "Joshua.Hartmann93",
+            "password": "thlBkgNk2pA2e8x",
+            "name": "Brenden",
+            "lastname": "Daniel",
+            "age": 19
+        }
+    ]
+}

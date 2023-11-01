@@ -4,6 +4,7 @@ import '../public/assets/layout/css/layout-dark.css';
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
 import 'primeflex/primeflex.css';
+import React from 'react';
 
 function MyApp({ Component, pageProps }) {
   return <Component {...pageProps} />

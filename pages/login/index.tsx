@@ -39,7 +39,7 @@ const Login = () => {
 			.catch(() => {
 				toast.current.show({ severity: 'error', summary: 'Error', detail: 'Invalid data', life: 3000 });
 			})
-			.finally(setLoading)
+			.finally(() => setLoading(false))
 	}, [username, password])
 
 	return (
