@@ -1,6 +1,6 @@
 import axios from 'axios';
 import dynamic from 'next/dynamic';
-import Router from "next/router";
+import Router, { useRouter } from "next/router";
 import { InputText } from 'primereact/inputtext';
 import React, { useCallback, useRef, useState } from 'react';
 import Head from 'next/head';
@@ -11,8 +11,8 @@ const DynamicButton = dynamic(() => import('primereact/button').then(button => b
 })
 
 const Register = () => {
-
-    const [id, setId] = useState('')
+    const router = useRouter();
+    const [login, setLogin] = useState('')
     const [password, setPassword] = useState('')
     const [name, setName] = useState('')
     const [lastname, setLastname] = useState('')
@@ -20,10 +20,14 @@ const Register = () => {
     const [loading, setLoading] = useState(false)
     const toast = useRef(null);
 
+    const cancel = useCallback(() => {
+        router.push('/login');
+    }, [router]);
+
     const register = useCallback(() => {
         setLoading(true)
         axios.post('/api/auth/register', {
-            id,
+            login,
             password,
             name,
             lastname,
@@ -35,8 +39,8 @@ const Register = () => {
             .catch(() => {
                 toast.current.show({ severity: 'error', summary: 'Error', detail: 'Invalid data', life: 3000 });
             })
-            .finally(setLoading)
-    }, [id, password, name, lastname, age])
+            .finally(() => setLoading(false))
+    }, [login, password, name, lastname, age])
 
     return (
         <>
@@ -57,8 +61,8 @@ const Register = () => {
                                     <i className="pi pi-user"></i>
                                 </span>
                                 <span className="p-float-label">
-                                    <InputText onChange={e => setId(e.target.value)} type="text" id="inputgroup1" />
-                                    <label htmlFor="inputgroup1">Id</label>
+                                    <InputText onChange={e => setLogin(e.target.value)} type="text" id="inputgroup1" />
+                                    <label htmlFor="inputgroup1">Login</label>
                                 </span>
                             </div>
 
@@ -104,6 +108,8 @@ const Register = () => {
 
                             <div className="p-inputgroup mt-3">
                                 <DynamicButton label="Register" onClick={register} disabled={loading} />
+                                <span style={{ margin: '0 10px' }}></span>
+                                <DynamicButton label="Cancel" onClick={cancel} className="p-button-secondary" />
                             </div>
                         </div>
                     </div>
