@@ -1,5 +1,4 @@
 import jwt, { JwtPayload } from 'jsonwebtoken';
-import { JWT_SECRET } from '../../../jwt';
 import UserService from '../../../service/UserService'
 
 export default function handler(req, res) {

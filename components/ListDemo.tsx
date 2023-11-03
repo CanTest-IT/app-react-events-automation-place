@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import nookies from 'nookies';
 import { Button } from 'primereact/button';
 import { DataView, DataViewLayoutOptions } from 'primereact/dataview';
 import { Dialog } from 'primereact/dialog';
@@ -13,6 +14,7 @@ import Head from 'next/head'
 import moment from 'moment';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import axios from 'axios'
+import TokenService from '../service/TokenService';
 
 const getFilteredEvents = (events, query) => {
     if (!query) return events;
@@ -84,8 +86,17 @@ const ListDemo = () => {
     }, [])
 
     useEffect(() => {
-        fetch('/api/categories')
-          .then((res) => res.json())
+        const cookies = nookies.get();
+        const token = cookies.cantest_token;
+        fetch('/api/categories', {
+            headers: {
+                'Authorization': `Bearer ${token}` // Add the token to the request headers
+            }
+        })
+          .then((res) => {
+            if (res.status === 401) TokenService.forceLogout()
+            return res.json()
+          })
           .then((data) => {
             setCategories(data)
           })
