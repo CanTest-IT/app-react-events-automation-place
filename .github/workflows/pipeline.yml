@@ -5,7 +5,7 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
+  apiTests:
     runs-on: ubuntu-latest
     strategy:
       matrix:
