@@ -3,7 +3,6 @@ import { getRandomUser } from '../generator/user';
 import { getRandomEvent } from '../generator/event';
 import { registerUser } from '../actions/register';
 import { loginUserAndGetToken } from '../actions/login';
-import { Event } from '../../domain/event';
 
 const testedEndpoint = '/api/events'
 

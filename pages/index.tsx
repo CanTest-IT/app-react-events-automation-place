@@ -27,7 +27,7 @@ export async function getServerSideProps(context) {
     if (cantest_token) {
         const userFromToken = jwt.decode(cantest_token, JWT_SECRET)
         if (userFromToken) {
-            user = new UserService().getUserByLogin(userFromToken.login)
+            user = UserService.getUserByLogin(userFromToken.login)
         }
     }
     

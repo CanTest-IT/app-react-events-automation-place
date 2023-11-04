@@ -4,13 +4,13 @@ import { Event, EventWithId } from '../domain/event';
 
 export default class EventService {
 
-    getAllEvents(): EventWithId[] {
+    static getAllEvents(): EventWithId[] {
         db.reload()
         const events: EventWithId[] = db.getData("/events")
         return events
     }
 
-    getEventById(id: string) {
+    static getEventById(id: string) {
         try {
             const index = db.getIndex('/events', id, 'id')
             if (index < 0 || index === undefined) return null
@@ -20,7 +20,7 @@ export default class EventService {
         }
     }
 
-    addNewEvent(event: Event): string {
+    static addNewEvent(event: Event): string {
         const id = uuidv4()
         db.push("/events[]", {
             ...event, id
@@ -29,12 +29,12 @@ export default class EventService {
         return id
     }
 
-    updateEvent(id: string, body: Event): void {
+    static updateEvent(id: string, body: Event): void {
         const index = db.getIndex('/events', id)
         db.push(`/events[${index}]`, body, true);
     }
 
-    deleteEvent(id: string): void {
+    static deleteEvent(id: string): void {
         const index = db.getIndex('/events', id)
         db.delete(`/events[${index}]`)
     }

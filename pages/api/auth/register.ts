@@ -6,7 +6,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         case 'POST':
             const { login, password, name, lastname, age } = req.body;
             try {
-                const newUser = new UserService().createUser({ login, password, name, lastname, age });
+                const newUser = UserService.createUser({ login, password, name, lastname, age });
                 return res.status(201).json(newUser);
             } catch (error) {
                 if (error.message === userAlreadyExists) {

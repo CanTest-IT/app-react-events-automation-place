@@ -6,13 +6,13 @@ export const wrongLoginOrPassword = 'Wrong login or password'
 
 export default class UserService {
 
-    getUserByLogin(login: string) {
+    static getUserByLogin(login: string) {
         const index = db.getIndex('/users', login, 'login')
         if (index < 0) return null
         return db.getData(`/users[${index}]`);
     }
 
-    createUser(user: User) {
+    static createUser(user: User) {
         const index = db.getIndex('/users', user.login, 'login');
         if (index !== -1) {
             throw new Error(userAlreadyExists);

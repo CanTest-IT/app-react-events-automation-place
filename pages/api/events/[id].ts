@@ -1,11 +1,9 @@
 import jwt from 'jsonwebtoken';
 import { JWT_SECRET } from '../../../jwt';
-import EventService from "../../../service/EventService";
 import { NextApiRequest, NextApiResponse } from 'next';
+import EventService from '../../../service/EventService';
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
-    const eventService = new EventService()
-
     const authHeader = req.headers.authorization;
     const token = authHeader && authHeader.split(' ')[1];
 
@@ -20,17 +18,17 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         switch (req.method) {
             case 'PUT':
                 console.log(`attempting to edit eventId ${id}`)
-                eventService.updateEvent(id, req.body)
-                if (!eventService.getEventById(id)) {
+                EventService.updateEvent(id, req.body)
+                if (!EventService.getEventById(id)) {
                     return res.status(404).end()
                 }
                 return res.status(200).end()
             case 'DELETE':
                 console.log(`attempting to delete eventId ${id}`)
-                if (!eventService.getEventById(id)) {
+                if (!EventService.getEventById(id)) {
                     return res.status(404).end()
                 }
-                eventService.deleteEvent(id)
+                EventService.deleteEvent(id)
                 return res.status(200).end()
         }
     } catch (err) {
