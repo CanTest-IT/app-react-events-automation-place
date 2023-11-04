@@ -1,9 +1,8 @@
-import fs from 'fs'
-import path from 'path'
+import { NextApiRequest, NextApiResponse } from "next"
+import ImagesService from "../../../service/ImagesService"
 
-export default function handler(req, res) {
-    const filePath = path.resolve('.', `public/assets/thumbs`)
-    const list = fs.readdirSync(filePath, { withFileTypes: true })
+export default function handler(req: NextApiRequest, res: NextApiResponse) {
+    const images = ImagesService.getImages()
     res.status(200)
-    res.json(list.map(elem => elem.name))
+    res.json(images)
 }

@@ -1,5 +1,4 @@
 import classNames from 'classnames';
-import nookies from 'nookies';
 import { Button } from 'primereact/button';
 import { DataView, DataViewLayoutOptions } from 'primereact/dataview';
 import { Dialog } from 'primereact/dialog';
@@ -67,14 +66,20 @@ const ListDemo = () => {
     const [sortOrder, setSortOrder] = useState(null);
     const [sortField, setSortField] = useState(null);
 
-
     const fetchEvents = () => {
-        fetch('/api/events')
-          .then((res) => res.json())
-          .then((data) => {
+        fetch('/api/events', {
+            headers: {
+                'Authorization': `Bearer ${TokenService.getAuthToken()}`
+            }
+        })
+        .then((res) => {
+            if (res.status === 401) TokenService.forceLogout()
+            return res.json()
+        })
+        .then((data) => {
             setEvents(data)
             setDataviewValue(getFilteredEvents(data, searchText))
-          })
+        })
     }
 
     useEffect(() => {
@@ -86,11 +91,9 @@ const ListDemo = () => {
     }, [])
 
     useEffect(() => {
-        const cookies = nookies.get();
-        const token = cookies.cantest_token;
         fetch('/api/categories', {
             headers: {
-                'Authorization': `Bearer ${token}` // Add the token to the request headers
+                'Authorization': `Bearer ${TokenService.getAuthToken()}`
             }
         })
           .then((res) => {

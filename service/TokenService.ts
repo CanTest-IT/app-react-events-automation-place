@@ -7,4 +7,9 @@ export default class TokenService {
         window.location.href = '/login';
     }
 
+    static getAuthToken = () => {
+        const cookies = nookies.get();
+        return cookies.cantest_token;
+    }
+
 }

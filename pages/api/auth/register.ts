@@ -1,6 +1,7 @@
+import { NextApiRequest, NextApiResponse } from 'next';
 import UserService, { userAlreadyExists } from '../../../service/UserService';
 
-export default function handler(req, res) {
+export default function handler(req: NextApiRequest, res: NextApiResponse) {
     switch (req.method) {
         case 'POST':
             const { login, password, name, lastname, age } = req.body;
