@@ -14,6 +14,9 @@ import moment from 'moment';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import axios from 'axios'
 import TokenService from '../service/TokenService';
+import secureApiAccess from '../axios/secureApi';
+import { Event, EventWithCategory, EventWithId } from '../domain/event'
+import { Category } from '../domain/category';
 
 const getFilteredEvents = (events, query) => {
     if (!query) return events;
@@ -22,23 +25,24 @@ const getFilteredEvents = (events, query) => {
 
 const ListDemo = () => {
 
-    let emptyProduct = {
+    let currentEvent: EventWithCategory = {
         name: '',
         description: '',
         category: null,
         price: 0,
         dateFrom: null,
         dateTo: null,
-        image: null
+        image: null,
+        isPremium: null,
+        id: ''
     };
-    
 
     const [eventDialog, setEventDialog] = useState(false);
-    const [events, setEvents] = useState([])
-    const [event, setEvent] = useState(emptyProduct);
+    const [events, setEvents] = useState<EventWithCategory[]>([]);
+    const [event, setEvent] = useState<EventWithCategory>(currentEvent);
     const [searchText, setSearchText] = useState('')
     const [submitted, setSubmitted] = useState(false);
-    const [categories, setCategories] = useState([])
+    const [categories, setCategories] = useState<Category[]>([])
     const [images, setImages] = useState([])
     const [eventToDelete, setEventToDelete] = useState(false)
     const toast = useRef(null);
@@ -50,7 +54,7 @@ const ListDemo = () => {
             dateFrom: data.dateFrom && new Date(data.dateFrom),
             dateTo: data.dateTo && new Date(data.dateTo),
             category: categories.find(c => c.code === data.category)
-        } || emptyProduct);
+        } || currentEvent);
         setSubmitted(false);
         setEventDialog(true);
     }
@@ -67,19 +71,11 @@ const ListDemo = () => {
     const [sortField, setSortField] = useState(null);
 
     const fetchEvents = () => {
-        fetch('/api/events', {
-            headers: {
-                'Authorization': `Bearer ${TokenService.getAuthToken()}`
-            }
-        })
-        .then((res) => {
-            if (res.status === 401) TokenService.forceLogout()
-            return res.json()
-        })
-        .then((data) => {
-            setEvents(data)
-            setDataviewValue(getFilteredEvents(data, searchText))
-        })
+        secureApiAccess.getEvents()
+            .then((data) => {
+                setEvents(data)
+                setDataviewValue(getFilteredEvents(data, searchText))
+            })
     }
 
     useEffect(() => {
@@ -91,26 +87,18 @@ const ListDemo = () => {
     }, [])
 
     useEffect(() => {
-        fetch('/api/categories', {
-            headers: {
-                'Authorization': `Bearer ${TokenService.getAuthToken()}`
-            }
-        })
-          .then((res) => {
-            if (res.status === 401) TokenService.forceLogout()
-            return res.json()
-          })
-          .then((data) => {
-            setCategories(data)
-          })
+        secureApiAccess.getCategories()
+            .then((data) => {
+                setCategories(data)
+            })
     }, [])
 
     useEffect(() => {
         fetch('/api/images')
-          .then((res) => res.json())
-          .then((data) => {
-            setImages(data)
-          })
+            .then((res) => res.json())
+            .then((data) => {
+                setImages(data)
+            })
     }, [])
 
     const onInputChange = (e, key) => {
@@ -135,7 +123,7 @@ const ListDemo = () => {
         setSubmitted(true);
         let promise;
         let error = false
-        const keys = ['name','price']
+        const keys = ['name', 'price']
         keys.forEach(key => {
             if (!event[key]) error = true
         })
@@ -144,14 +132,16 @@ const ListDemo = () => {
 
         const body = {
             ...event,
-            dateFrom: event.dateFrom && event.dateFrom.toISOString(),
-            dateTo: event.dateTo && event.dateTo.toISOString(),
-            category: event.category?.code
+            category: event.category.code
         }
         if (event.id) {
             promise = axios.put(`/api/events/${event.id}`, body)
         } else {
-            promise = axios.post('/api/events', body)
+            promise = axios.post('/api/events', body, {
+                headers: {
+                    'Authorization': `Bearer ${TokenService.getAuthToken()}`
+                }
+            })
         }
         promise
             .then(() => {
@@ -207,7 +197,7 @@ const ListDemo = () => {
                     </div>
                     <div className="flex flex-row md:flex-column justify-content-between w-full md:w-auto align-items-center md:align-items-end mt-5 md:mt-0">
                         <Button icon="pi pi-user-edit" onClick={() => open(data)} label="" ></Button>
-                        <br/>
+                        <br />
                         <Button className="p-button-outlined p-button-danger" icon="pi pi-trash" onClick={() => setEventToDelete(data)} label=""></Button>
                     </div>
                 </div>
@@ -238,13 +228,13 @@ const ListDemo = () => {
                                 <Rating value={data.rating} readonly cancel={false} />
                             </div>
                         </div>
-                        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop: 10}}>
+                        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop: 10 }}>
                             <div>
-                                <i className="pi pi-calendar" style={{marginRight: 3}}></i>
+                                <i className="pi pi-calendar" style={{ marginRight: 3 }}></i>
                                 <small>{moment(data.dateFrom).format('D MMMM YY')}</small>
                             </div>
                             <div>
-                                <i className="pi pi-money-bill" style={{marginRight: 3}}></i>
+                                <i className="pi pi-money-bill" style={{ marginRight: 3 }}></i>
                                 <small>${data.price}</small>
                             </div>
                         </div>
@@ -276,63 +266,63 @@ const ListDemo = () => {
 
     return (
         <>
-        <Head>
-            <title>CanTest network</title>
-            <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-            <link rel="icon" type="image/x-icon" href="https://static.wixstatic.com/media/d4a01c_579d7aafc6be4be9ac6f31eaacfeef96%7Emv2.png/v1/fill/w_32%2Ch_32%2Clg_1%2Cusm_0.66_1.00_0.01/d4a01c_579d7aafc6be4be9ac6f31eaacfeef96%7Emv2.png"></link>
-        </Head>
-        <div className="grid list-demo">
-            <Toast ref={toast} />
-            <Dialog header="Confirmation" visible={eventToDelete} onHide={() => setEventToDelete(false)} style={{ width: '350px' }} modal footer={confirmationDialogFooter}>
-                <div className="flex align-items-center justify-content-center">
-                    <i className="pi pi-exclamation-triangle mr-3" style={{ fontSize: '2rem' }} />
-                    <span>Are you sure you want to delete {eventToDelete?.name}?</span>
-                </div>
-            </Dialog>
-            <div className="col-12">
-                <div className="card">
-                    <h5>Events list</h5>
-                    <DataView value={dataviewValue} layout={layout} paginator rows={9} sortOrder={sortOrder} sortField={sortField} itemTemplate={itemTemplate} header={dataviewHeader}></DataView>
-                    <Dialog footer={eventDialogFooter} visible={eventDialog} style={{ width: '450px' }} header="Event details" modal className="p-fluid" onHide={hideDialog}>
-                        <div className="field">
-                            <label htmlFor="name">Title</label>
-                            <InputText id="name" value={event.name} onChange={(e) => onInputChange(e, 'name')} required autoFocus className={classNames({ 'p-invalid': submitted && !event.name })} />
-                        </div>
-                        <div className="field">
-                            <label htmlFor="category">Category</label>
-                            <Dropdown id="category" options={categories} value={event.category} onChange={(e) => onInputChange(e, 'category')} optionLabel="name"></Dropdown>
-                        </div>
-                        <div className="field">
-                            <label htmlFor="price">Price</label>
-                            <InputNumber id="price" value={event.price} className={classNames({ 'p-invalid': submitted && !event.price })} onChange={(e) => onInputChange(e, 'price')}></InputNumber>
-                        </div>
-                        <div className="field">
-                            <label htmlFor="dateFrom">Date from</label>
-                            <Calendar inputId="dateFrom" value={event.dateFrom} onChange={(e) => onInputChange(e, 'dateFrom')}></Calendar>
-                        </div>
-                        <div className="field">
-                            <label htmlFor="dateTo">Date to</label>
-                            <Calendar inputId="dateTo" value={event.dateTo} onChange={(e) => onInputChange(e, 'dateTo')}></Calendar>
-                        </div>
-                        <div className="field">
-                            <label htmlFor="dateTo">Image</label>
-                            <div style={styles.imgContainer}>
-                                {images.map(image => {
-                                    const isSelected = event.image === image
-                                    return (
-                                        <img onClick={() => onInputChange({ value: image }, 'image')} style={isSelected ? styles.imgSelected : styles.img} src={`/api/images/${image}`}/>
-                                    )
-                                })}
+            <Head>
+                <title>CanTest network</title>
+                <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+                <link rel="icon" type="image/x-icon" href="https://static.wixstatic.com/media/d4a01c_579d7aafc6be4be9ac6f31eaacfeef96%7Emv2.png/v1/fill/w_32%2Ch_32%2Clg_1%2Cusm_0.66_1.00_0.01/d4a01c_579d7aafc6be4be9ac6f31eaacfeef96%7Emv2.png"></link>
+            </Head>
+            <div className="grid list-demo">
+                <Toast ref={toast} />
+                <Dialog header="Confirmation" visible={eventToDelete} onHide={() => setEventToDelete(false)} style={{ width: '350px' }} modal footer={confirmationDialogFooter}>
+                    <div className="flex align-items-center justify-content-center">
+                        <i className="pi pi-exclamation-triangle mr-3" style={{ fontSize: '2rem' }} />
+                        <span>Are you sure you want to delete {eventToDelete?.name}?</span>
+                    </div>
+                </Dialog>
+                <div className="col-12">
+                    <div className="card">
+                        <h5>Events list</h5>
+                        <DataView value={dataviewValue} layout={layout} paginator rows={9} sortOrder={sortOrder} sortField={sortField} itemTemplate={itemTemplate} header={dataviewHeader}></DataView>
+                        <Dialog footer={eventDialogFooter} visible={eventDialog} style={{ width: '450px' }} header="Event details" modal className="p-fluid" onHide={hideDialog}>
+                            <div className="field">
+                                <label htmlFor="name">Title</label>
+                                <InputText id="name" value={event.name} onChange={(e) => onInputChange(e, 'name')} required autoFocus className={classNames({ 'p-invalid': submitted && !event.name })} />
                             </div>
-                        </div>
-                        <div className="field-checkbox">
-                            <Checkbox inputId="isPremium" className="mr-2"  onChange={e => onInputChange(e, 'isPremium')} checked={event.isPremium} />
-                            <label htmlFor="isPremium">Is premium</label>
-                        </div>
-                    </Dialog>
+                            <div className="field">
+                                <label htmlFor="category">Category</label>
+                                <Dropdown id="category" options={categories} value={event.category} onChange={(e) => onInputChange(e, 'category')} optionLabel="name"></Dropdown>
+                            </div>
+                            <div className="field">
+                                <label htmlFor="price">Price</label>
+                                <InputNumber id="price" value={event.price} className={classNames({ 'p-invalid': submitted && !event.price })} onChange={(e) => onInputChange(e, 'price')}></InputNumber>
+                            </div>
+                            <div className="field">
+                                <label htmlFor="dateFrom">Date from</label>
+                                <Calendar inputId="dateFrom" value={event.dateFrom} onChange={(e) => onInputChange(e, 'dateFrom')}></Calendar>
+                            </div>
+                            <div className="field">
+                                <label htmlFor="dateTo">Date to</label>
+                                <Calendar inputId="dateTo" value={event.dateTo} onChange={(e) => onInputChange(e, 'dateTo')}></Calendar>
+                            </div>
+                            <div className="field">
+                                <label htmlFor="dateTo">Image</label>
+                                <div style={styles.imgContainer}>
+                                    {images.map(image => {
+                                        const isSelected = event.image === image
+                                        return (
+                                            <img onClick={() => onInputChange({ value: image }, 'image')} style={isSelected ? styles.imgSelected : styles.img} src={`/api/images/${image}`} />
+                                        )
+                                    })}
+                                </div>
+                            </div>
+                            <div className="field-checkbox">
+                                <Checkbox inputId="isPremium" className="mr-2" onChange={e => onInputChange(e, 'isPremium')} checked={event.isPremium} />
+                                <label htmlFor="isPremium">Is premium</label>
+                            </div>
+                        </Dialog>
+                    </div>
                 </div>
             </div>
-        </div>
         </>
     )
 }
