@@ -8,7 +8,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     switch (req.method) {
         case 'POST':
             const { login, password } = req.body
-            const user = UserService.getUserByLogin(login)
+            const user = new UserService().getUserByLogin(login)
             if (!user || user.password !== password) {
                 return res.status(401).json({ error: wrongLoginOrPassword })
             }
