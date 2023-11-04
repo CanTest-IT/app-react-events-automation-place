@@ -9,12 +9,24 @@ export default class EventService {
         const events: EventWithId[] = db.getData("/events")
         return events
     }
-    
-    addNewEvent(event: Event): void {
+
+    getEventById(id: string) {
+        try {
+            const index = db.getIndex('/events', id, 'id')
+            if (index < 0 || index === undefined) return null
+            return db.getData(`/events[${index}]`);
+        } catch (error) {
+            return null;
+        }
+    }
+
+    addNewEvent(event: Event): string {
+        const id = uuidv4()
         db.push("/events[]", {
-            ...event,
-            id: uuidv4()            
+            ...event, id
         }, true);
+
+        return id
     }
 
     updateEvent(id: string, body: Event): void {
@@ -24,6 +36,6 @@ export default class EventService {
 
     deleteEvent(id: string): void {
         const index = db.getIndex('/events', id)
-        db.delete(`/events[${index}]`);
+        db.delete(`/events[${index}]`)
     }
 }

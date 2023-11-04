@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker';
-import { Event } from '../../domain/event';
+import { Event} from '../../domain/event';
 import ImagesService from '../../service/ImagesService';
 import CategoryService from '../../service/CategoryService';
 
@@ -12,6 +12,6 @@ export const getRandomEvent = (): Event => {
         dateFrom: faker.date.future().toISOString(),
         dateTo: faker.date.future().toISOString(),
         image: faker.helpers.arrayElement(ImagesService.getImages()),
-        isPremium: faker.datatype.boolean(),
+        isPremium: faker.datatype.boolean()
     }
 }

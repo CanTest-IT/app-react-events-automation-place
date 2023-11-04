@@ -15,7 +15,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import axios from 'axios'
 import TokenService from '../service/TokenService';
 import secureApiAccess from '../axios/secureApi';
-import { Event, EventWithCategory, EventWithId } from '../domain/event'
+import { EventWithCategory } from '../domain/event'
 import { Category } from '../domain/category';
 
 const getFilteredEvents = (events, query) => {
@@ -30,8 +30,8 @@ const ListDemo = () => {
         description: '',
         category: null,
         price: 0,
-        dateFrom: null,
-        dateTo: null,
+        dateFrom: moment().format('YYYY-MM-DD'),
+        dateTo: moment().format('YYYY-MM-DD'),
         image: null,
         isPremium: null,
         id: ''
@@ -110,7 +110,11 @@ const ListDemo = () => {
     }
 
     const deleteEvent = useCallback((data) => {
-        axios.delete(`api/events/${data.id}`)
+        axios.delete(`api/events/${data.id}`, {
+            headers: {
+                'Authorization': `Bearer ${TokenService.getAuthToken()}`
+            }
+        })
             .then(() => {
                 hideDialog()
                 toast.current.show({ severity: 'success', summary: 'Success', detail: 'Event deleted', life: 3000 });
@@ -135,7 +139,11 @@ const ListDemo = () => {
             category: event.category.code
         }
         if (event.id) {
-            promise = axios.put(`/api/events/${event.id}`, body)
+            promise = axios.put(`/api/events/${event.id}`, body, {
+                headers: {
+                    'Authorization': `Bearer ${TokenService.getAuthToken()}`
+                }
+            })
         } else {
             promise = axios.post('/api/events', body, {
                 headers: {
@@ -157,11 +165,10 @@ const ListDemo = () => {
     const dataviewHeader = (
         <div className="grid grid-nogutter">
             <div className="col-6" style={{ textAlign: 'left' }}>
-                <Button label="New" icon="pi pi-plus" className="p-button-success mr-2" onClick={() => open()} />
+                <Button label="New" icon="pi pi-plus" className="p-button-success mr-2" onClick={() => open(null)} />
             </div>
             <div className="col-6" style={{ textAlign: 'right', flexDirection: 'row', display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
-                <InputText style={{ marginRight: 8 }} type="search" onInput={(e) => setSearchText(e.target.value)} placeholder="Search..." />
-                <DataViewLayoutOptions layout={layout} onChange={(e) => setLayout(e.value)} />
+                <InputText style={{ marginRight: 8 }} type="search" onInput={(e: React.ChangeEvent<HTMLInputElement>) => setSearchText(e.target.value)} placeholder="Search..." />                <DataViewLayoutOptions layout={layout} onChange={(e) => setLayout(e.value)} />
             </div>
         </div>
     );
@@ -181,7 +188,7 @@ const ListDemo = () => {
                     <div className="flex-1 text-center md:text-left">
                         <div className="font-bold text-2xl">{data.name}</div>
                         <div className="mb-3">{data.description}</div>
-                        <Rating value={data.rating} readonly cancel={false} className="mb-2"></Rating>
+                        <Rating value={data.rating} readOnly cancel={false} className="mb-2"></Rating>
                         <div className="flex align-items-center">
                             <i className="pi pi-tag mr-2"></i>
                             <span className="font-semibold">{data.category}</span>
@@ -225,7 +232,7 @@ const ListDemo = () => {
                         <div style={{ display: 'flex', alignItems: 'center' }}>
                             <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
                                 <div style={{ lineBreak: 'anywhere' }} className="text-xl font-bold">{data.name}</div>
-                                <Rating value={data.rating} readonly cancel={false} />
+                                <Rating value={data.rating} readOnly cancel={false} />
                             </div>
                         </div>
                         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop: 10 }}>
@@ -273,52 +280,69 @@ const ListDemo = () => {
             </Head>
             <div className="grid list-demo">
                 <Toast ref={toast} />
-                <Dialog header="Confirmation" visible={eventToDelete} onHide={() => setEventToDelete(false)} style={{ width: '350px' }} modal footer={confirmationDialogFooter}>
+                {/* @ts-ignore */}
+                <Dialog
+                    header="Confirmation"
+                    visible={eventToDelete}
+                    onHide={() => setEventToDelete(false)}
+                    style={{ width: '350px' }}
+                    modal
+                    footer={confirmationDialogFooter}
+                >
                     <div className="flex align-items-center justify-content-center">
                         <i className="pi pi-exclamation-triangle mr-3" style={{ fontSize: '2rem' }} />
-                        <span>Are you sure you want to delete {eventToDelete?.name}?</span>
+                        <span>Are you sure?</span>
                     </div>
                 </Dialog>
                 <div className="col-12">
                     <div className="card">
                         <h5>Events list</h5>
                         <DataView value={dataviewValue} layout={layout} paginator rows={9} sortOrder={sortOrder} sortField={sortField} itemTemplate={itemTemplate} header={dataviewHeader}></DataView>
-                        <Dialog footer={eventDialogFooter} visible={eventDialog} style={{ width: '450px' }} header="Event details" modal className="p-fluid" onHide={hideDialog}>
-                            <div className="field">
-                                <label htmlFor="name">Title</label>
-                                <InputText id="name" value={event.name} onChange={(e) => onInputChange(e, 'name')} required autoFocus className={classNames({ 'p-invalid': submitted && !event.name })} />
-                            </div>
-                            <div className="field">
-                                <label htmlFor="category">Category</label>
-                                <Dropdown id="category" options={categories} value={event.category} onChange={(e) => onInputChange(e, 'category')} optionLabel="name"></Dropdown>
-                            </div>
-                            <div className="field">
-                                <label htmlFor="price">Price</label>
-                                <InputNumber id="price" value={event.price} className={classNames({ 'p-invalid': submitted && !event.price })} onChange={(e) => onInputChange(e, 'price')}></InputNumber>
-                            </div>
-                            <div className="field">
-                                <label htmlFor="dateFrom">Date from</label>
-                                <Calendar inputId="dateFrom" value={event.dateFrom} onChange={(e) => onInputChange(e, 'dateFrom')}></Calendar>
-                            </div>
-                            <div className="field">
-                                <label htmlFor="dateTo">Date to</label>
-                                <Calendar inputId="dateTo" value={event.dateTo} onChange={(e) => onInputChange(e, 'dateTo')}></Calendar>
-                            </div>
-                            <div className="field">
-                                <label htmlFor="dateTo">Image</label>
-                                <div style={styles.imgContainer}>
-                                    {images.map(image => {
-                                        const isSelected = event.image === image
-                                        return (
-                                            <img onClick={() => onInputChange({ value: image }, 'image')} style={isSelected ? styles.imgSelected : styles.img} src={`/api/images/${image}`} />
-                                        )
-                                    })}
+                        {/* @ts-ignore */}
+                        <Dialog
+                            footer={eventDialogFooter}
+                            visible={eventDialog}
+                            style={{ width: '450px' }}
+                            header="Event details"
+                            modal
+                            className="p-fluid"
+                            onHide={hideDialog}
+                        >
+                            <>
+                                <div className="field">
+                                    <label htmlFor="name">Title</label>
+                                    <InputText id="name" value={event.name} onChange={(e) => onInputChange(e, 'name')} required autoFocus className={classNames({ 'p-invalid': submitted && !event.name })} />
                                 </div>
-                            </div>
-                            <div className="field-checkbox">
-                                <Checkbox inputId="isPremium" className="mr-2" onChange={e => onInputChange(e, 'isPremium')} checked={event.isPremium} />
-                                <label htmlFor="isPremium">Is premium</label>
-                            </div>
+                                <div className="field">
+                                    <label htmlFor="category">Category</label>
+                                    <Dropdown id="category" options={categories} value={event.category} onChange={(e) => onInputChange(e, 'category')} optionLabel="name"></Dropdown>
+                                </div>
+                                <div className="field">
+                                    <label htmlFor="price">Price</label>
+                                    <InputNumber id="price" value={event.price} className={classNames({ 'p-invalid': submitted && !event.price })} onChange={(e) => onInputChange(e, 'price')}></InputNumber>
+                                </div>
+                                <div className="field">
+                                    <label htmlFor="dateFrom">Date from</label>
+                                    <Calendar inputId="dateFrom" value={new Date(event.dateFrom)} onChange={(e) => onInputChange(e, 'dateFrom')}></Calendar>                                    </div>
+                                <div className="field">
+                                    <label htmlFor="dateTo">Date to</label>
+                                    <Calendar inputId="dateTo" value={new Date(event.dateTo)} onChange={(e) => onInputChange(e, 'dateTo')}></Calendar>                                    </div>
+                                <div className="field">
+                                    <label htmlFor="dateTo">Image</label>
+                                    <div style={styles.imgContainer}>
+                                        {images.map(image => {
+                                            const isSelected = event.image === image
+                                            return (
+                                                <img onClick={() => onInputChange({ value: image }, 'image')} style={isSelected ? styles.imgSelected : styles.img} src={`/api/images/${image}`} />
+                                            )
+                                        })}
+                                    </div>
+                                </div>
+                                <div className="field-checkbox">
+                                    <Checkbox inputId="isPremium" className="mr-2" onChange={e => onInputChange(e, 'isPremium')} checked={event.isPremium} />
+                                    <label htmlFor="isPremium">Is premium</label>
+                                </div>
+                            </>
                         </Dialog>
                     </div>
                 </div>
@@ -329,7 +353,7 @@ const ListDemo = () => {
 
 export default ListDemo
 
-const styles = {
+const styles: { [key: string]: React.CSSProperties } = {
     imgContainer: {
         display: 'flex',
         flexDirection: 'row',

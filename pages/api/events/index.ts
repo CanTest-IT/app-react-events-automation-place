@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { JWT_SECRET } from '../../../jwt';
 import EventService from "../../../service/EventService";
-import { Event, EventWithId } from '../../../domain/event';
+import { EventWithId } from '../../../domain/event';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -24,9 +24,11 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
                     .setHeader('Content-Type', 'application/json')
                     .json(events)
             case 'POST':
-                const newEvent: Event = req.body;
-                eventService.addNewEvent(newEvent)
-                return res.status(200).end()
+                const newEvent = req.body;
+                const id = eventService.addNewEvent(newEvent)
+                return res.status(200)
+                    .setHeader('Content-Type', 'application/json')
+                    .json({ id })
         }
     } catch (err) {
         return res.status(401).end()

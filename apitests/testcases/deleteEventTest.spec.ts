@@ -1,41 +1,57 @@
+import { v4 as uuidv4 } from 'uuid';
 import { apiServer } from '../utils/constants';
 import { getRandomUser } from '../generator/user';
 import { getRandomEvent } from '../generator/event';
 import { registerUser } from '../actions/register';
 import { loginUserAndGetToken } from '../actions/login';
-import { Event } from '../../domain/event';
+import { postEvent } from '../actions/event';
 
-const testedEndpoint = '/api/events'
+const testedEndpoint = '/api/events';
 
-describe('POST /api/events', () => {
-    test('should return 200 OK for authenticated user and valid event',
+describe('DELETE /api/events/[id]', () => {
+    test('should return 200 OK for authenticated user and existing event',
         async () => {
             // given
             const user = getRandomUser()
             await registerUser(user)
             const token = await loginUserAndGetToken(user)
             const event = getRandomEvent()
+            const eventId = await postEvent(event, token)
 
             // when
             const response = await apiServer
-                .post(testedEndpoint)
-                .set('Authorization', `Bearer ${token}`)
-                .send(event);
+                .delete(`${testedEndpoint}/${eventId}`)
+                .set('Authorization', `Bearer ${token}`);
 
             // then
             expect(response.status).toEqual(200)
-            expect(response.body.id).toBeDefined()
+        });
+
+    test('should return 404 NOT FOUND for authenticated user and nonexisting event',
+        async () => {
+            // given
+            const user = getRandomUser()
+            await registerUser(user)
+            const token = await loginUserAndGetToken(user)
+            const id = uuidv4()
+
+            // when
+            const response = await apiServer
+                .delete(`${testedEndpoint}/${id}`)
+                .set('Authorization', `Bearer ${token}`);
+
+            // then
+            expect(response.status).toEqual(404)
         });
 
     test('should return 401 for unauthenticated user',
         async () => {
             // given
-            const event = getRandomEvent()
+            const id = uuidv4()
 
             // when
             const response = await apiServer
-                .post(testedEndpoint)
-                .send(event);
+                .delete(`${testedEndpoint}/${id}`);
 
             // then
             expect(response.status).toEqual(401)
@@ -46,12 +62,12 @@ describe('POST /api/events', () => {
             // given
             const invalidToken = 'invalidToken'
             const event = getRandomEvent()
+            const id = uuidv4()
 
             // when
             const response = await apiServer
-                .post(testedEndpoint)
-                .set('Authorization', `Bearer ${invalidToken}`)
-                .send(event);
+                .delete(`${testedEndpoint}/${id}`)
+                .set('Authorization', `Bearer ${invalidToken}`);
 
             // then
             expect(response.status).toEqual(401)
