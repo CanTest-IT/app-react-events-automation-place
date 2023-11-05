@@ -10,7 +10,7 @@ import AppMenu from '../components/AppMenu';
 import AppConfig from '../components/AppConfig';
 import Router from "next/router";
 
-import ListDemo from '../components/ListDemo';
+import EventList from '../components/eventslist/ListDemo';
 
 import PrimeReact from 'primereact/api';
 import { Tooltip } from "primereact/tooltip";
@@ -358,7 +358,7 @@ const App = ({ currentUser }) => {
 
                 <div className="layout-main">
                     <div className="layout-content">
-                      <ListDemo/>
+                      <EventList/>
                     </div>
 
                     <AppFooter colorMode={colorMode} />

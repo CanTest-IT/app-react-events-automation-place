@@ -13,18 +13,18 @@ import Head from 'next/head'
 import moment from 'moment';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import axios from 'axios'
-import TokenService from '../service/TokenService';
-import secureApiAccess from '../axios/secureApi';
-import { EventWithCategory } from '../domain/event'
-import { Category } from '../domain/category';
+import TokenService from '../../service/TokenService';
+import secureApiAccess from '../../axios/secureApi';
+import { EventWithCategory } from '../../domain/event'
+import { Category } from '../../domain/category';
+import { styles } from './styles';
 
 const getFilteredEvents = (events, query) => {
     if (!query) return events;
     return events.filter((e) => e.name.toLowerCase().includes(query.toLowerCase().trim()))
 }
 
-const ListDemo = () => {
-
+const EventList = () => {
     let currentEvent: EventWithCategory = {
         name: '',
         description: '',
@@ -46,7 +46,8 @@ const ListDemo = () => {
     const [images, setImages] = useState([])
     const [eventToDelete, setEventToDelete] = useState(false)
     const toast = useRef(null);
-    const dt = useRef(null);
+    const [dataviewValue, setDataviewValue] = useState(null);
+    const [layout, setLayout] = useState('grid');
 
     const open = (data) => {
         setEvent(data && {
@@ -63,12 +64,6 @@ const ListDemo = () => {
         setSubmitted(false);
         setEventDialog(false);
     }
-
-    const [dataviewValue, setDataviewValue] = useState(null);
-    const [layout, setLayout] = useState('grid');
-    const [sortKey, setSortKey] = useState(null);
-    const [sortOrder, setSortOrder] = useState(null);
-    const [sortField, setSortField] = useState(null);
 
     const fetchEvents = () => {
         secureApiAccess.getEvents()
@@ -297,7 +292,7 @@ const ListDemo = () => {
                 <div className="col-12">
                     <div className="card">
                         <h5>Events list</h5>
-                        <DataView value={dataviewValue} layout={layout} paginator rows={9} sortOrder={sortOrder} sortField={sortField} itemTemplate={itemTemplate} header={dataviewHeader}></DataView>
+                        <DataView value={dataviewValue} layout={layout} paginator rows={9} itemTemplate={itemTemplate} header={dataviewHeader}></DataView>
                         {/* @ts-ignore */}
                         <Dialog
                             footer={eventDialogFooter}
@@ -351,30 +346,4 @@ const ListDemo = () => {
     )
 }
 
-export default ListDemo
-
-const styles: { [key: string]: React.CSSProperties } = {
-    imgContainer: {
-        display: 'flex',
-        flexDirection: 'row',
-        overflowX: 'scroll'
-    },
-    img: {
-        height: 50,
-        width: 50,
-        borderRadius: 5,
-        marginRight: 5,
-        cursor: 'pointer',
-        border: '3px solid transparent',
-        boxSizing: 'border-box'
-    },
-    imgSelected: {
-        height: 50,
-        width: 50,
-        borderRadius: 5,
-        marginRight: 5,
-        cursor: 'pointer',
-        border: '3px solid orange',
-        boxSizing: 'border-box'
-    }
-}
+export default EventList
