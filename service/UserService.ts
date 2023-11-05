@@ -1,4 +1,4 @@
-import { User } from '../domain/user';
+import { User, UserWithoutPassword } from '../domain/user';
 import { db } from '../db/accessor';
 
 export const userAlreadyExists = 'User already exists'
@@ -19,6 +19,12 @@ export default class UserService {
         }
         db.push('/users[]', user, true);
         return user;
+    }
+
+    getAllUsers(): UserWithoutPassword[] {
+        db.reload()
+        const users: User[] = db.getData("/users")
+        return users.map(({ password, ...rest }) => rest);
     }
     
 }
