@@ -10,7 +10,7 @@ import AppMenu from '../components/AppMenu';
 import AppConfig from '../components/AppConfig';
 import Router from "next/router";
 
-import EventList from '../components/eventslist/ListDemo';
+import EventList from '../components/eventlist/EventList';
 
 import PrimeReact from 'primereact/api';
 import { Tooltip } from "primereact/tooltip";
