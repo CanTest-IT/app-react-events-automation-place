@@ -12,8 +12,6 @@ import { Toast } from 'primereact/toast';
 import Head from 'next/head'
 import moment from 'moment';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import axios from 'axios'
-import TokenService from '../../service/TokenService';
 import secureApiAccess from '../../axios/secureApi';
 import { EventWithCategory } from '../../domain/event'
 import { Category } from '../../domain/category';
@@ -23,8 +21,6 @@ const getFilteredEvents = (events, query) => {
     if (!query) return events;
     return events.filter((e) => e.name.toLowerCase().includes(query.toLowerCase().trim()))
 }
-
-
 
 const EventList = () => {
     let currentEvent: EventWithCategory = {
@@ -91,8 +87,7 @@ const EventList = () => {
     }, [])
 
     useEffect(() => {
-        fetch('/api/images')
-            .then((res) => res.json())
+        secureApiAccess.getImages()
             .then((data) => {
                 setImages(data)
             })

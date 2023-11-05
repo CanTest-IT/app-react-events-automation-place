@@ -23,6 +23,14 @@ const secureApiAccess = {
         return await res.json();
     },
 
+    getImages: async () => {
+        const res = await fetch('/api/images', {
+            headers: authHeaders()
+        });
+        if (res.status === 401) TokenService.forceLogout();
+        return await res.json();
+    },
+
     deleteEvent: async (id: string) => {
         const res = await fetch(`/api/events/${id}`, {
             method: 'DELETE',
