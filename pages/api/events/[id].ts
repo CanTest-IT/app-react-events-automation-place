@@ -24,14 +24,16 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
                 if (!eventService.getEventById(id)) {
                     return res.status(404).end()
                 }
-                return res.status(200).end()
+                return res.status(200)
+                    .setHeader('Content-Type', 'application/json')
+                    .json(req.body)
             case 'DELETE':
                 console.log(`attempting to delete eventId ${id}`)
                 if (!eventService.getEventById(id)) {
                     return res.status(404).end()
                 }
                 eventService.deleteEvent(id)
-                return res.status(200).end()
+                return res.status(204).end()
         }
     } catch (err) {
         return res.status(401).end()

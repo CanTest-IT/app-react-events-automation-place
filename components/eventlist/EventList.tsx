@@ -105,11 +105,7 @@ const EventList = () => {
     }
 
     const deleteEvent = useCallback((data) => {
-        axios.delete(`api/events/${data.id}`, {
-            headers: {
-                'Authorization': `Bearer ${TokenService.getAuthToken()}`
-            }
-        })
+        secureApiAccess.deleteEvent(data.id)
             .then(() => {
                 hideDialog()
                 toast.current.show({ severity: 'success', summary: 'Success', detail: 'Event deleted', life: 3000 });

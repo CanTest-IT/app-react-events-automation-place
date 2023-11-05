@@ -21,6 +21,15 @@ const secureApiAccess = {
         });
         if (res.status === 401) TokenService.forceLogout();
         return await res.json();
+    },
+
+    deleteEvent: async (id: string) => {
+        const res = await fetch(`/api/events/${id}`, {
+            method: 'DELETE',
+            headers: authHeaders()
+        });
+        if (res.status === 401) TokenService.forceLogout();
+        return res.status === 204 ? {} : await res.json();
     }
 }
 

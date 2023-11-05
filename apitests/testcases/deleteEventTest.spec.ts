@@ -9,7 +9,7 @@ import { postEvent } from '../actions/event';
 const testedEndpoint = '/api/events';
 
 describe('DELETE /api/events/[id]', () => {
-    test('should return 200 OK for authenticated user and existing event',
+    test('should return 204 NO CONTENT for authenticated user and existing event',
         async () => {
             // given
             const user = getRandomUser()
@@ -24,7 +24,7 @@ describe('DELETE /api/events/[id]', () => {
                 .set('Authorization', `Bearer ${token}`);
 
             // then
-            expect(response.status).toEqual(200)
+            expect(response.status).toEqual(204)
         });
 
     test('should return 404 NOT FOUND for authenticated user and nonexisting event',
