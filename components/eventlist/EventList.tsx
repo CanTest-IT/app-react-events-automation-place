@@ -24,6 +24,8 @@ const getFilteredEvents = (events, query) => {
     return events.filter((e) => e.name.toLowerCase().includes(query.toLowerCase().trim()))
 }
 
+
+
 const EventList = () => {
     let currentEvent: EventWithCategory = {
         name: '',
@@ -114,33 +116,24 @@ const EventList = () => {
             })
     }, [])
 
+    const validationErrors = () => {
+        const keys = ['name', 'price', 'category']
+        return keys.some(key => !event[key]);
+    }
+
     const saveEvent = useCallback(() => {
         setSubmitted(true);
-        let promise;
-        let error = false
-        const keys = ['name', 'price']
-        keys.forEach(key => {
-            if (!event[key]) error = true
-        })
-
-        if (error) return;
+        if (validationErrors()) return;
 
         const body = {
             ...event,
             category: event.category.code
         }
+        let promise;
         if (event.id) {
-            promise = axios.put(`/api/events/${event.id}`, body, {
-                headers: {
-                    'Authorization': `Bearer ${TokenService.getAuthToken()}`
-                }
-            })
+            promise = secureApiAccess.updateEvent(event.id, body)
         } else {
-            promise = axios.post('/api/events', body, {
-                headers: {
-                    'Authorization': `Bearer ${TokenService.getAuthToken()}`
-                }
-            })
+            promise = secureApiAccess.createEvent(body)
         }
         promise
             .then(() => {
@@ -306,7 +299,7 @@ const EventList = () => {
                                 </div>
                                 <div className="field">
                                     <label htmlFor="category">Category</label>
-                                    <Dropdown id="category" options={categories} value={event.category} onChange={(e) => onInputChange(e, 'category')} optionLabel="name"></Dropdown>
+                                    <Dropdown id="category" options={categories} value={event.category} onChange={(e) => onInputChange(e, 'category')} optionLabel="name" className={classNames({ 'p-invalid': submitted && !event.category })}></Dropdown>
                                 </div>
                                 <div className="field">
                                     <label htmlFor="price">Price</label>

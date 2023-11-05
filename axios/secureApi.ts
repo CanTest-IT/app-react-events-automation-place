@@ -30,6 +30,32 @@ const secureApiAccess = {
         });
         if (res.status === 401) TokenService.forceLogout();
         return res.status === 204 ? {} : await res.json();
+    },
+
+    createEvent: async (body: any) => {
+        const res = await fetch('/api/events', {
+            method: 'POST',
+            headers: {
+                ...authHeaders(),
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
+        });
+        if (res.status === 401) TokenService.forceLogout();
+        return await res.json();
+    },
+
+    updateEvent: async (id: string, body: any) => {
+        const res = await fetch(`/api/events/${id}`, {
+            method: 'PUT',
+            headers: {
+                ...authHeaders(),
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
+        });
+        if (res.status === 401) TokenService.forceLogout();
+        return await res.json();
     }
 }
 
