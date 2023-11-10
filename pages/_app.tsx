@@ -6,8 +6,27 @@ import 'primeicons/primeicons.css';
 import 'primeflex/primeflex.css';
 import React from 'react';
 
-function MyApp({ Component, pageProps }) {
-  return <Component {...pageProps} />
-}
+// function MyApp({ Component, pageProps }) {
+//   return <Component {...pageProps} />
+// }
 
-export default MyApp
+// export default MyAp
+
+
+import type { ReactElement, ReactNode } from 'react'
+import type { NextPage } from 'next'
+import type { AppProps } from 'next/app'
+ 
+export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
+  getLayout?: (page: ReactElement, pageProps: P) => ReactNode
+}
+ 
+type AppPropsWithLayout = AppProps & {
+  Component: NextPageWithLayout
+}
+ 
+export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
+  const getLayout = Component.getLayout ?? ((page) => page)
+
+  return getLayout(<Component {...pageProps} />, pageProps)
+}

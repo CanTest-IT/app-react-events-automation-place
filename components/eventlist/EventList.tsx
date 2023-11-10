@@ -22,7 +22,7 @@ const getFilteredEvents = (events, query) => {
     return events.filter((e) => e.name.toLowerCase().includes(query.toLowerCase().trim()))
 }
 
-const EventList = () => {
+const EventList = ({ currentUser }) => {
     let currentEvent: EventWithCategory = {
         name: '',
         description: '',

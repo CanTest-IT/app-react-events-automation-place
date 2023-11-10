@@ -5,6 +5,7 @@ import { InputText } from 'primereact/inputtext';
 import React, { useCallback, useRef, useState } from 'react';
 import Head from 'next/head';
 import { Toast } from 'primereact/toast';
+import { ReactElement } from 'react';
 
 const DynamicButton = dynamic(() => import('primereact/button').then(button => button.Button), {
     ssr: false,
@@ -118,5 +119,9 @@ const Register = () => {
         </>
     )
 }
+
+Register.getLayout = function getLayout(page: ReactElement) {
+    return page;
+  }
 
 export default Register;
