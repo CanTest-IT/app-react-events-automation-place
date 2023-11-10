@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import Layout from '../components/Layout';
+import Layout from '../components/layout';
 import EventList from '../components/eventlist/EventList';
 import UserService from '../service/UserService';
 import jwt from 'jsonwebtoken';
