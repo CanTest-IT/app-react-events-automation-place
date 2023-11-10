@@ -1,27 +1,28 @@
 import axios from 'axios';
 import dynamic from 'next/dynamic';
-import Router from "next/router";
+import Router, { useRouter } from "next/router";
 import { setCookie } from 'nookies';
 import { InputText } from 'primereact/inputtext';
 import React, { useCallback, useRef, useState } from 'react';
 import Head from 'next/head';
 import { Toast } from 'primereact/toast';
+import { ReactElement } from 'react';
 
 const DynamicButton = dynamic(() => import('primereact/button').then(button => button.Button), {
 	ssr: false,
 })
 
 const Login = () => {
-
+	const router = useRouter()
 	const [username, setUsername] = useState('')
 	const [password, setPassword] = useState('')
 	const [loading, setLoading] = useState(false)
 	const toast = useRef(null);
 	// const history = useHistory();
 
-	const goDashboard = () => {
-		// history.push('/');
-	}
+	const goRegister = () => {
+		router.push('/register');
+	  };
 
 	const login = useCallback(() => {
 		setLoading(true)
@@ -39,7 +40,7 @@ const Login = () => {
 			.catch(() => {
 				toast.current.show({ severity: 'error', summary: 'Error', detail: 'Invalid data', life: 3000 });
 			})
-			.finally(setLoading)
+			.finally(() => setLoading(false))
 	}, [username, password])
 
 	return (
@@ -95,12 +96,20 @@ const Login = () => {
 							</span>
 						</div>
 					</div>
-					<DynamicButton disabled={loading} onClick={login} className="login-button px-3" label="LOGIN"></DynamicButton>
+					<div className="p-inputgroup mt-3">
+					<DynamicButton disabled={loading} onClick={login} className="login-button px-3" label="Login"></DynamicButton>
+					<span style={{ margin: '0 10px' }}></span>
+					<DynamicButton onClick={goRegister} className="p-button-secondary" label="Register"></DynamicButton>
+					</div>
 				</div>
 			</div>
 		</div>
 		</>
 	)
 }
+
+Login.getLayout = function getLayout(page: ReactElement) {
+	return page;
+  }
 
 export default Login;

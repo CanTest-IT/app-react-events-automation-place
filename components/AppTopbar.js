@@ -129,7 +129,9 @@ const AppTopbar = (props) => {
     return (
         <div className="layout-topbar shadow-4">
             <div className="layout-topbar-left">
-                <img style={{ width: 200 }} src="assets/logo.png" />
+                <a href="https://www.cantest.it" target="_blank">
+                    <img style={{ width: 200 }} src="assets/logo.png" />
+                </a>
                 <button type="button" style={{ backgroundColor: '#ff5c13' }} className="layout-menu-button shadow-6 p-link" onClick={props.onMenuButtonClick}>
                     <i className="pi pi-chevron-right"></i>
                 </button>

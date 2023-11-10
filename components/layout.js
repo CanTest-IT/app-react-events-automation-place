@@ -1,46 +1,19 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { classNames } from 'primereact/utils';
-import nookies from 'nookies'
-
-import AppTopbar from '../components/AppTopbar';
-// import AppBreadcrumb from "../components/AppBreadcrumb";
-import AppInlineMenu from '../components/AppInlineMenu';
-import AppFooter from '../components/AppFooter';
-import AppMenu from '../components/AppMenu';
-import AppConfig from '../components/AppConfig';
-import Router from "next/router";
-
-import ListDemo from '../components/ListDemo';
-
+import React, { useState } from 'react';
+import AppTopbar from './AppTopbar';
+import AppInlineMenu from './AppInlineMenu';
+import AppFooter from './AppFooter';
+import AppMenu from './AppMenu';
+import AppConfig from './AppConfig';
+import { useRef, useEffect } from 'react';
+import Router from 'next/router';
+import classNames from 'classnames';
 import PrimeReact from 'primereact/api';
-import { Tooltip } from "primereact/tooltip";
-import UserService from '../service/UserService';
-import jwt from 'jsonwebtoken';
-import JWT_SECRET from '../jwt';
+import { CurrentUserContext } from '../pages/index';
+import { Tooltip } from 'primereact/tooltip';
 
-export const RTLContext = React.createContext();
-export const CurrentUserContext = React.createContext();
+const Layout = ({ children, currentUser }) => {
 
-export async function getServerSideProps(context) {
-    const { cantest_token } = context.req.cookies
-    let user = null;
-    if (cantest_token) {
-        const userFromToken = jwt.decode(cantest_token, JWT_SECRET)
-        if (userFromToken) {
-            user = new UserService().getUserById(userFromToken.id)
-        }
-    }
-    
-    return {
-      props: {
-          currentUser: user
-      }, // will be passed to the page component as props
-    }
-  }
-
-const App = ({ currentUser }) => {
-
-    const [menuMode, setMenuMode] = useState('static');
+  const [menuMode, setMenuMode] = useState('static');
     const [inlineMenuPosition, setInlineMenuPosition] = useState('bottom');
     const [desktopMenuActive, setDesktopMenuActive] = useState(true);
     const [mobileMenuActive, setMobileMenuActive] = useState(false);
@@ -73,12 +46,12 @@ const App = ({ currentUser }) => {
         {
             label: 'Menu', icon: 'pi pi-fw pi-home',
             items: [
-                { label: "Events", icon: "pi pi-star", url: "https://www.cantest.it", target: "_blank" },
+                { label: "Events", icon: "pi pi-star", url: "/", target: "_self" },
                 { label: "Finances", disabled: true, icon: "pi pi-money-bill", url: "https://www.primefaces.org/primeflex", target: "_blank" },
                 { label: "CRM", disabled: true, icon: "pi pi-server", url: "https://www.primefaces.org/primeflex", target: "_blank" },
                 { label: "Sales", disabled: true, icon: "pi pi-chart-bar", url: "https://www.primefaces.org/primeflex", target: "_blank" },
                 { label: "Insights", disabled: true, icon: "pi pi-list", url: "https://www.primefaces.org/primeflex", target: "_blank" },
-                { label: "Settings", disabled: true, icon: "pi pi-cog", url: "https://www.primefaces.org/primeflex", target: "_blank" },
+                { label: "Blank Page", icon: "pi pi-cog", url: "/blank-page", target: "_self" },
             ],
         }
     ];
@@ -145,6 +118,9 @@ const App = ({ currentUser }) => {
             setNewThemeLoaded(true);
         });
 
+    }
+    const isIE = () => {
+        return /(MSIE|Trident\/|Edge\/)/i.test(window.navigator.userAgent)
     }
 
     const replaceLink = (linkElement, href, callback) => {
@@ -300,10 +276,6 @@ const App = ({ currentUser }) => {
         return menuMode === 'slim';
     }
 
-    const isIE = () => {
-        return /(MSIE|Trident\/|Edge\/)/i.test(window.navigator.userAgent)
-    }
-
     const onInlineMenuClick = (e, key) => {
         let menuKeys = { ...inlineMenuActive };
         if (key !== currentInlineMenuKey.current && currentInlineMenuKey.current) {
@@ -336,52 +308,52 @@ const App = ({ currentUser }) => {
 
     return (
         <CurrentUserContext.Provider value={{ currentUser }}>
-            <div className={layoutContainerClassName} onClick={onDocumentClick}>
-                <Tooltip ref={copyTooltipRef} target=".block-action-copy" position="bottom" content="Copied to clipboard" event="focus" />
-
-                <AppTopbar horizontal={isHorizontal()}
-                    activeTopbarItem={activeTopbarItem}
-                    onMenuButtonClick={onMenuButtonClick}
-                    onTopbarItemClick={onTopbarItemClick}
-                    onRightMenuButtonClick={onRightMenuButtonClick}
-                    onMobileTopbarButtonClick={onMobileTopbarButtonClick} mobileTopbarActive={mobileTopbarActive}
-                    searchActive={searchActive} onSearch={onSearch} />
-
-                <div className="menu-wrapper" onClick={onMenuClick}>
-                    <div className="layout-menu-container">
-                        {(inlineMenuPosition === 'top' || inlineMenuPosition === 'both') && <AppInlineMenu menuKey="top" inlineMenuActive={inlineMenuActive} onInlineMenuClick={onInlineMenuClick} horizontal={isHorizontal()} menuMode={menuMode} />}
-                        <AppMenu model={menu} onMenuItemClick={onMenuItemClick} onRootMenuItemClick={onRootMenuItemClick}
-                            menuMode={menuMode} active={menuActive} />
-                        {(inlineMenuPosition === 'bottom' || inlineMenuPosition === 'both') && <AppInlineMenu menuKey="bottom" inlineMenuActive={inlineMenuActive} onInlineMenuClick={onInlineMenuClick} horizontal={isHorizontal()} menuMode={menuMode} />}
-                    </div>
-                </div>
-
-                <div className="layout-main">
-                    <div className="layout-content">
-                      <ListDemo/>
-                    </div>
-
-                    <AppFooter colorMode={colorMode} />
-
-                </div>
-
-                <AppConfig inputStyle={inputStyle} onInputStyleChange={onInputStyleChange}
-                    rippleEffect={ripple} onRippleEffect={onRipple}
-                    menuMode={menuMode} onMenuModeChange={onMenuModeChange}
-                    inlineMenuPosition={inlineMenuPosition} onInlineMenuPositionChange={onInlineMenuPositionChange}
-                    colorMode={colorMode} onColorModeChange={onColorModeChange}
-                    menuTheme={menuTheme} onMenuThemeChange={onMenuThemeChange}
-                    topbarTheme={topbarTheme} onTopbarThemeChange={onTopbarThemeChange}
-                    theme={theme} onThemeChange={onThemeChange}
-                    isRTL={true} onRTLChange={onRTLChange} />
-
-                {/* <AppRightMenu rightMenuActive={rightMenuActive} onRightMenuButtonClick={onRightMenuButtonClick} /> */}
-
-                {mobileMenuActive && <div className="layout-mask modal-in"></div>}
+          <div className={layoutContainerClassName} onClick={onDocumentClick}>
+            <Tooltip ref={copyTooltipRef} target=".block-action-copy" position="bottom" content="Copied to clipboard" event="focus" />
+    
+            <AppTopbar horizontal={isHorizontal()}
+              activeTopbarItem={activeTopbarItem}
+              onMenuButtonClick={onMenuButtonClick}
+              onTopbarItemClick={onTopbarItemClick}
+              onRightMenuButtonClick={onRightMenuButtonClick}
+              onMobileTopbarButtonClick={onMobileTopbarButtonClick} mobileTopbarActive={mobileTopbarActive}
+              searchActive={searchActive} onSearch={onSearch} />
+    
+            <div className="menu-wrapper" onClick={onMenuClick}>
+              <div className="layout-menu-container">
+                {(inlineMenuPosition === 'top' || inlineMenuPosition === 'both') && <AppInlineMenu menuKey="top" inlineMenuActive={inlineMenuActive} onInlineMenuClick={onInlineMenuClick} horizontal={isHorizontal()} menuMode={menuMode} />}
+                <AppMenu model={menu} onMenuItemClick={onMenuItemClick} onRootMenuItemClick={onRootMenuItemClick}
+                  menuMode={menuMode} active={menuActive} />
+                {(inlineMenuPosition === 'bottom' || inlineMenuPosition === 'both') && <AppInlineMenu menuKey="bottom" inlineMenuActive={inlineMenuActive} onInlineMenuClick={onInlineMenuClick} horizontal={isHorizontal()} menuMode={menuMode} />}
+              </div>
             </div>
-        </CurrentUserContext.Provider>
-    );
 
+            <div className="layout-main">
+          <div className="layout-content">
+          {/* The children prop in the Layout component is used to render the specific content for each page index return. This way, you can wrap any page-specific content with the Layout component, and the content will be rendered in place of {children}. */}
+            {children}
+          </div>
+
+          <AppFooter colorMode={colorMode} />
+
+        </div>
+
+        <AppConfig inputStyle={inputStyle} onInputStyleChange={onInputStyleChange}
+          rippleEffect={ripple} onRippleEffect={onRipple}
+          menuMode={menuMode} onMenuModeChange={onMenuModeChange}
+          inlineMenuPosition={inlineMenuPosition} onInlineMenuPositionChange={onInlineMenuPositionChange}
+          colorMode={colorMode} onColorModeChange={onColorModeChange}
+          menuTheme={menuTheme} onMenuThemeChange={onMenuThemeChange}
+          topbarTheme={topbarTheme} onTopbarThemeChange={onTopbarThemeChange}
+          theme={theme} onThemeChange={onThemeChange}
+          isRTL={true} onRTLChange={onRTLChange} />
+
+        {/* <AppRightMenu rightMenuActive={rightMenuActive} onRightMenuButtonClick={onRightMenuButtonClick} /> */}
+
+        {mobileMenuActive && <div className="layout-mask modal-in"></div>}
+      </div>
+    </CurrentUserContext.Provider>
+  );
 }
 
-export default App;
+export default Layout;
